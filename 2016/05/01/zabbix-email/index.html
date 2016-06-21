@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Zabbix邮件报警脚本 | Strong It</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Zabbix安装教程请移步 Zabbix Installzabbix邮件报警配置步骤说明：
+
+1、准备一个发送邮件的脚本
+2、修改zabbix配置文件中指定的脚本路径
+3、关联脚本名称
+4、用户设置收件邮箱与报警时间
+5、配置报警触发器
+6、添加多个用户，同时给多个人发邮件
+7、邮件接收测试
+
+1、发送邮件的脚本1234567891011121314151617181920212223242526">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zabbix邮件报警脚本">
+<meta property="og:url" content="http://strongit.github.io/2016/05/01/zabbix-email/index.html">
+<meta property="og:site_name" content="Strong It">
+<meta property="og:description" content="Zabbix安装教程请移步 Zabbix Installzabbix邮件报警配置步骤说明：
+
+1、准备一个发送邮件的脚本
+2、修改zabbix配置文件中指定的脚本路径
+3、关联脚本名称
+4、用户设置收件邮箱与报警时间
+5、配置报警触发器
+6、添加多个用户，同时给多个人发邮件
+7、邮件接收测试
+
+1、发送邮件的脚本1234567891011121314151617181920212223242526">
+<meta property="og:image" content="http://strongit.github.io/img/media-types.png">
+<meta property="og:image" content="http://strongit.github.io/img/zabbix-user.png">
+<meta property="og:image" content="http://strongit.github.io/img/user-permission.png">
+<meta property="og:image" content="http://strongit.github.io/img/zabbix-action.png">
+<meta property="og:image" content="http://strongit.github.io/img/action-operation.png">
+<meta property="og:image" content="http://strongit.github.io/img/multi-user.png">
+<meta property="og:image" content="http://strongit.github.io/img/test-email.png">
+<meta property="og:updated_time" content="2016-05-13T18:40:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zabbix邮件报警脚本">
+<meta name="twitter:description" content="Zabbix安装教程请移步 Zabbix Installzabbix邮件报警配置步骤说明：
+
+1、准备一个发送邮件的脚本
+2、修改zabbix配置文件中指定的脚本路径
+3、关联脚本名称
+4、用户设置收件邮箱与报警时间
+5、配置报警触发器
+6、添加多个用户，同时给多个人发邮件
+7、邮件接收测试
+
+1、发送邮件的脚本1234567891011121314151617181920212223242526">
+<meta name="twitter:image" content="http://strongit.github.io/img/media-types.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Strong It" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Strong It</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/rancher/" style="font-size: 10px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://strongit.blog.51cto.com/">创者思的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">从事Linux运维数年，专注于运维自动化、python</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Strong It</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="null" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Strong It</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-zabbix-email" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/01/zabbix-email/" class="article-date">
+  	<time datetime="2016-04-30T16:00:00.000Z" itemprop="datePublished">2016-05-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Zabbix邮件报警脚本
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Zabbix安装教程请移步 <a href="http://strongit.blog.51cto.com/10020534/1709616" target="_blank" rel="external">Zabbix Install</a><br>zabbix邮件报警配置步骤说明：</p>
+<blockquote>
+<p>1、准备一个发送邮件的脚本</p>
+<p>2、修改zabbix配置文件中指定的脚本路径</p>
+<p>3、关联脚本名称</p>
+<p>4、用户设置收件邮箱与报警时间</p>
+<p>5、配置报警触发器</p>
+<p>6、添加多个用户，同时给多个人发邮件</p>
+<p>7、邮件接收测试</p>
+</blockquote>
+<h3 id="1、发送邮件的脚本"><a href="#1、发送邮件的脚本" class="headerlink" title="1、发送邮件的脚本"></a>1、发送邮件的脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># author:Strong It</span></span><br><span class="line"><span class="comment"># send zabbix message by email,usage: ./zabbix_email.py 收件人 标题 邮件内容</span></span><br><span class="line"></span><br><span class="line">import smtplib</span><br><span class="line">import sys</span><br><span class="line">import time</span><br><span class="line">from email.MIMEText import MIMEText</span><br><span class="line">from email.Header import Header</span><br><span class="line">from email.utils import parseaddr, formataddr</span><br><span class="line">from email import encoders</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf8'</span>)</span><br><span class="line">current_time=time.strftime(<span class="string">'%Y-%m-%d  %H:%M'</span>,time.localtime(time.time()))</span><br><span class="line">  </span><br><span class="line">mail_host =<span class="string">'smtp.exmail.qq.com'</span></span><br><span class="line">mail_user =<span class="string">'Strong It@*****.com'</span></span><br><span class="line">mail_<span class="built_in">pwd</span> = <span class="string">'*****'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#地址格式化函数</span></span><br><span class="line">def _format_addr(s):</span><br><span class="line">    name, addr = parseaddr(s)</span><br><span class="line">    <span class="built_in">return</span> formataddr(( \</span><br><span class="line">        Header(name, <span class="string">'utf-8'</span>).encode(), \</span><br><span class="line">        addr.encode(<span class="string">'utf-8'</span>) <span class="keyword">if</span> isinstance(addr, unicode) <span class="keyword">else</span> addr))</span><br><span class="line"></span><br><span class="line"><span class="comment">#发送邮件函数</span></span><br><span class="line">def send_email( content,mailto, get_sub ):</span><br><span class="line">    msg = MIMEText( content,_subtype = <span class="string">'plain'</span>, _charset = <span class="string">'utf-8'</span>)</span><br><span class="line">    <span class="comment">#msg = MIMEText(content,_subtype='plain',_charset='gb2312')</span></span><br><span class="line">    msg[<span class="string">'From'</span>] = _format_addr(u<span class="string">'Zabbix监控 &lt;%s&gt;'</span> % mail_user)</span><br><span class="line">    msg[<span class="string">'Subject'</span>] = _format_addr(u<span class="string">'报警信息 &lt;%s&gt;'</span> % get_sub)</span><br><span class="line">    msg[<span class="string">'To'</span>] = <span class="string">","</span>.join( mailto )  <span class="comment">#多邮件账号格式用,分开</span></span><br><span class="line">    try:</span><br><span class="line">        s = smtplib.SMTP_SSL( mail_host, 465)       </span><br><span class="line">        <span class="comment">#s = smtplib.SMTP( mail_host, 25)       </span></span><br><span class="line">        s.login(mail_user, mail_<span class="built_in">pwd</span> )</span><br><span class="line">        s.sendmail(mail_user, mailto,msg.as_string())</span><br><span class="line">        s.close()</span><br><span class="line">    except Exception as e:</span><br><span class="line">        <span class="built_in">return</span> <span class="string">'Exception: '</span>, e</span><br><span class="line"></span><br><span class="line"><span class="comment">#注意以下格式对齐</span></span><br><span class="line">title = sys.argv[2]</span><br><span class="line">cont = <span class="string">""</span><span class="string">"</span><br><span class="line">---------------------------------</span><br><span class="line">摘要：  </span><br><span class="line">%s</span><br><span class="line">---------------------------------</span><br><span class="line">时间：  %s</span><br><span class="line">---------------------------------</span><br><span class="line">  </span><br><span class="line">"</span><span class="string">""</span>%(sys.argv[3],current_time)</span><br><span class="line">  </span><br><span class="line">to_list = [</span><br><span class="line">         <span class="string">'%s'</span>%(sys.argv[1]),</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line"><span class="comment">#发送邮件的日志记录到/tmp/sendmail.log</span></span><br><span class="line">with open(<span class="string">'/tmp/sendmail_qs.log'</span>,<span class="string">'ab'</span>) as f:</span><br><span class="line">    f.write(<span class="string">'%s  Receive address:  %s Title: %s \n'</span>%(current_time,sys.argv[1],title))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    send_email( cont, to_list, title)</span><br></pre></td></tr></table></figure>
+<p>脚本名称：zabbix_email.py，使用格式：./zabbix_email.py 收件人 标题 邮件内容</p>
+<h3 id="2、更改zabbix配置文件的脚本路径"><a href="#2、更改zabbix配置文件的脚本路径" class="headerlink" title="2、更改zabbix配置文件的脚本路径"></a>2、更改zabbix配置文件的脚本路径</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix alertscripts]<span class="comment"># cat /etc/zabbix/zabbix_server.conf |grep AlertScriptsPath</span></span><br><span class="line"><span class="comment">### Option: AlertScriptsPath</span></span><br><span class="line"><span class="comment"># AlertScriptsPath=$&#123;datadir&#125;/zabbix/alertscripts</span></span><br><span class="line">AlertScriptsPath=/usr/lib/zabbix/alertscripts</span><br></pre></td></tr></table></figure>
+<h3 id="3、关联脚本名称"><a href="#3、关联脚本名称" class="headerlink" title="3、关联脚本名称"></a>3、关联脚本名称</h3><p>【Administration –&gt; Media types】</p>
+<p><img src="/img/media-types.png" alt=""></p>
+<h3 id="4、用户设置收件邮箱与报警时间"><a href="#4、用户设置收件邮箱与报警时间" class="headerlink" title="4、用户设置收件邮箱与报警时间"></a>4、用户设置收件邮箱与报警时间</h3><p>【Administration –&gt; Users】</p>
+<p><img src="/img/zabbix-user.png" alt=""></p>
+<p><img src="/img/user-permission.png" alt=""></p>
+<h3 id="5、配置报警触发器"><a href="#5、配置报警触发器" class="headerlink" title="5、配置报警触发器"></a>5、配置报警触发器</h3><p>【Configuration –&gt; Actions】</p>
+<p><img src="/img/zabbix-action.png" alt=""></p>
+<p><img src="/img/action-operation.png" alt=""></p>
+<h3 id="6、添加多个用户，同时给多个人发邮件"><a href="#6、添加多个用户，同时给多个人发邮件" class="headerlink" title="6、添加多个用户，同时给多个人发邮件"></a>6、添加多个用户，同时给多个人发邮件</h3><p>【Administration –&gt; Users】</p>
+<p><img src="/img/multi-user.png" alt=""></p>
+<h3 id="7、接收邮件报警测试"><a href="#7、接收邮件报警测试" class="headerlink" title="7、接收邮件报警测试"></a>7、接收邮件报警测试</h3><p><img src="/img/test-email.png" alt=""></p>
+<p>至此，Zabbix邮件告警已完成。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/04/28/rancher-03-Installing-Rancher-Single-Node/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">单节点服务器安装</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="zabbix-email" data-title="Zabbix邮件报警脚本" data-url="http://strongit.github.io/2016/05/01/zabbix-email/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Strong It
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
