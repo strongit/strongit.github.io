@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://strongit.github.io/"/>
-  <updated>2016-05-13T18:40:16.000Z</updated>
+  <updated>2016-07-01T02:32:15.460Z</updated>
   <id>http://strongit.github.io/</id>
   
   <author>
@@ -14,6 +14,102 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>多节点高可用(HA)</title>
+    <link href="http://strongit.github.io/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/"/>
+    <id>http://strongit.github.io/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/</id>
+    <published>2016-06-03T16:00:00.000Z</published>
+    <updated>2016-07-01T02:32:15.460Z</updated>
+    
+    <content type="html">&lt;h6 id=&quot;基于-Rancher-v1-0-1&quot;&gt;&lt;a href=&quot;#基于-Rancher-v1-0-1&quot; class=&quot;headerlink&quot; title=&quot;基于 Rancher v1.0.1&quot;&gt;&lt;/a&gt;基于 Rancher v1.0.1&lt;/h6&gt;&lt;h4 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot; title=&quot;需求&quot;&gt;&lt;/a&gt;需求&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;多节点的HA配置请参照单一节点&lt;a href=&quot;&quot;&gt;需求&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;节点需要开放的端口&lt;ul&gt;
+&lt;li&gt;全局访问：TCP 端口&lt;code&gt;22&lt;/code&gt;,&lt;code&gt;80&lt;/code&gt;,&lt;code&gt;443&lt;/code&gt;,&lt;code&gt;18080&lt;/code&gt;（可选：用于在集群启动前 &lt;a href=&quot;&quot;&gt;查看并管理栈&lt;/a&gt; ）&lt;/li&gt;
+&lt;li&gt;节点间连接：&lt;ul&gt;
+&lt;li&gt;UDP 端口：&lt;code&gt;500&lt;/code&gt;,&lt;code&gt;4500&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;TCP 端口：&lt;code&gt;2181&lt;/code&gt;,&lt;code&gt;2376&lt;/code&gt;,&lt;code&gt;2888&lt;/code&gt;,&lt;code&gt;3888&lt;/code&gt;,&lt;code&gt;6379&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MySQL 数据库&lt;ul&gt;
+&lt;li&gt;至少 1GB 内存&lt;/li&gt;
+&lt;li&gt;每 Rancher Server 节点 50 连接（如：一个 3 节点的安装至少需要支持 150 连接）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;外部负载均衡器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;建议使用更大的部署&quot;&gt;&lt;a href=&quot;#建议使用更大的部署&quot; class=&quot;headerlink&quot; title=&quot;建议使用更大的部署&quot;&gt;&lt;/a&gt;建议使用更大的部署&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;每个 Rancher Server 节点应该有 4GB 或 8GB 可用内存，意味着至少需要 8GB 或 16GB 的物理内存&lt;/li&gt;
+&lt;li&gt;MySQL 数据库应该使用高速的磁盘&lt;/li&gt;
+&lt;li&gt;对于真正的高可用，建议使用复制的 MySQL 并做适当的备份。由于存在事物锁，可以选择 Galera 或强制写入单节点的方式。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;配置高可用-HA-的准备&quot;&gt;&lt;a href=&quot;#配置高可用-HA-的准备&quot; class=&quot;headerlink&quot; title=&quot;配置高可用(HA)的准备&quot;&gt;&lt;/a&gt;配置高可用(HA)的准备&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;根据 &lt;a href=&quot;&quot;&gt;使用外部数据库启动单节点&lt;/a&gt; 说明部署一个至少拥有 1GB 内存的 MySQL 数据库，但是不要使用其中启动 Rancher Server 的相关指令。因为默认情况下， 用户只能从本地访问数据库，你需要授权所有 Rancher Server 节点的网络。&lt;/li&gt;
+&lt;li&gt;配置一个外部负载均衡器并将端口 80 和 443 的流量指向运行 Rancher Server 的节点池。&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;使用这篇文档准备所有节点。这些节点都应该满足单节点部署 Rancher Server 的&lt;a href=&quot;&quot;&gt;需求&lt;/a&gt;。（可选）您可以提前拉取 &lt;code&gt;rancher/server&lt;/code&gt; 镜像到这些节点上。&lt;/p&gt;
+&lt;p&gt; 目前，我们的高可用集群支持 3 种配置。&lt;em&gt; 1 节点：没有高可用 &lt;/em&gt; 3 节点：任何一台主机可以宕机 * 5 节点：任何两台主机可以宕机&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;这些节点可以分布在同一个地区并使用稳定的高速链路连接的多个数据中心，不建议分布在过大的区域。如果你选择分布节点在同一个区域，Zookeeper 可以保证集群的高可用。如果你的节点分布在不同的数据中心，那么你只能保留问题最少的那个区域。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在其中一个节点上，启动一个 Rancher Server 用于生成配置脚本。下面这个脚本用于生成 Rancher Server 同时连接到外部数据库并初始化数据。它将被引导高可用部署过程。最终，Rancher Server 容器将使用此步骤替换为支持高可用的 Rancher Server 容器。&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ sudo docker run -d -p 8080:8080 \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;-e CATTLE_DB_CATTLE_MYSQL_HOST=&amp;lt;hostname or IP of MySQL instance&amp;gt; \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;-e CATTLE_DB_CATTLE_MYSQL_PORT=&amp;lt;port&amp;gt; \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;-e CATTLE_DB_CATTLE_MYSQL_NAME=&amp;lt;Name of Database&amp;gt; \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;-e CATTLE_DB_CATTLE_USERNAME=&amp;lt;Username&amp;gt; \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;-e CATTLE_DB_CATTLE_PASSWORD=&amp;lt;Password&amp;gt; \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;-v /var/run/docker.sock:/var/run/docker.sock \&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;rancher/server:v1.0.1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;请耐心等待，这个初始化步骤可能要15分钟才能完成&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;（可选）预先抓取 &lt;code&gt;rancher/server&lt;/code&gt; 镜像到 Rancher 节点。这里抓取的镜像可用于配置脚本生成 Rancher Server 。&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# The version would be whatever was used in Step 4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ sudo docker pull rancher/server:v1.0.1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&quot;生成配置脚本&quot;&gt;&lt;a href=&quot;#生成配置脚本&quot; class=&quot;headerlink&quot; title=&quot;生成配置脚本&quot;&gt;&lt;/a&gt;生成配置脚本&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;访问 Rancher Server 地址 &lt;code&gt;http://&amp;lt;server_IP&amp;gt;:8080&lt;/code&gt; 生成脚本。在 &lt;strong&gt;Admin&lt;/strong&gt; -&amp;gt; &lt;strong&gt;HA&lt;/strong&gt; 确认 Rancher Server 已经成功连接到外部数据库。如果没有正确配置，请重复上一节中的步骤 1 和 4 。&lt;/li&gt;
+&lt;li&gt;选择集群大小，应该为您的 Rancher Server 节点数量，参照上一节中步骤 3 。&lt;/li&gt;
+&lt;li&gt;在 &lt;strong&gt;Host Registration URL&lt;/strong&gt; 中填写外部负载均衡器的 IPv4 地址或主机名。&lt;/li&gt;
+&lt;li&gt;选择您想使用的证书类型。Rancher Server 可以为您生成一个自签名证书或者使用自己的有效证书。&lt;/li&gt;
+&lt;li&gt;点击 &lt;strong&gt;Generate Config Script&lt;/strong&gt; 。&lt;/li&gt;
+&lt;li&gt;下载脚本并保存到本地。&lt;/li&gt;
+&lt;li&gt;保存脚本后，停止用于生成脚本的 Rancher Server 容器。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&quot;启动高可用的-Rancher&quot;&gt;&lt;a href=&quot;#启动高可用的-Rancher&quot; class=&quot;headerlink&quot; title=&quot;启动高可用的 Rancher&quot;&gt;&lt;/a&gt;启动高可用的 Rancher&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;为了使所有节点支持高可用，你需要在所有节点上使用配置脚本启动 Rancher Server 。脚本将启动一个 Rancher Server 容器并连接到之前创建的外部数据库。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;请确保您已经停止用于生成脚本 &lt;code&gt;rancher-ha.sh&lt;/code&gt; 的 Rancher Server 容器后再运行配置脚本。否则，在你尝试在同一个节点运行配置脚本时，将会有一个端口冲突导致高可用节点无法启动。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果你之前生成配置脚本时提供了 &lt;strong&gt;Host Registration URL&lt;/strong&gt; ，请导航到外部负载均衡器的 IP 或主机名。请注意，Rancher Server 的用户界面可能需要几分钟才可以使用。如果你的用户界面仍不可用，请参照 &lt;a href=&quot;&quot;&gt;查看并管理栈&lt;/a&gt; 。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;一旦用户界面可用，您将可以添加主机到 Rancher 高可用集群。在 &lt;strong&gt;Admin&lt;/strong&gt; -&amp;gt; &lt;strong&gt;HA&lt;/strong&gt; 标签可以查看高可用节点的数量。添加主机前，您需要保存证书 &lt;code&gt;/var/lib/rancher/etc/ssl/ca.crt&lt;/code&gt; 并赋予 &lt;code&gt;400&lt;/code&gt; 权限到您要添加的主机上。注册命令可以自动创建使用并管理证书。&lt;/li&gt;
+&lt;li&gt;在您向环境中添加主机后，高可用设置已经完成，您可以开始通过用户界面 &lt;a href=&quot;&quot;&gt;添加服务&lt;/a&gt; ，从 Catalog &lt;a href=&quot;&quot;&gt;启动模板&lt;/a&gt; 或使用 &lt;a href=&quot;&quot;&gt;rancher-compose&lt;/a&gt; 启动服务。&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如果您正在使用 AWS ，你需要为添加到 Rancher 的主机配置 IP 。如果你想添加 &lt;a href=&quot;&quot;&gt;自定义主机&lt;/a&gt; ，你需要在配置页面中填写公网 IP ，启动 Rancher agent 的命令会相应改变。已经通过页面添加的主机，必须 &lt;a href=&quot;&quot;&gt;ssh&lt;/a&gt; 登陆到机器重启 Rancher agent 使 IP 生效。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;译者： XiaoBao Zhang&lt;/p&gt;
+&lt;p&gt;From： &lt;a href=&quot;http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h6 id=&quot;基于-Rancher-v1-0-1&quot;&gt;&lt;a href=&quot;#基于-Rancher-v1-0-1&quot; class=&quot;headerlink&quot; title=&quot;基于 Rancher v1.0.1&quot;&gt;&lt;/a&gt;基于 Rancher v1.0.1&lt;/h6&gt;&lt;h4 id=&quot;需求&quot;&gt;&lt;
+    
+    </summary>
+    
+    
+      <category term="rancher" scheme="http://strongit.github.io/tags/rancher/"/>
+    
+  </entry>
   
   <entry>
     <title>Zabbix邮件报警脚本</title>

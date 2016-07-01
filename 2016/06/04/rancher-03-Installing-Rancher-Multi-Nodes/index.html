@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>多节点高可用(HA) | Strong It</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="基于 Rancher v1.0.1需求
+多节点的HA配置请参照单一节点需求
+节点需要开放的端口
+全局访问：TCP 端口22,80,443,18080（可选：用于在集群启动前 查看并管理栈 ）
+节点间连接：
+UDP 端口：500,4500
+TCP 端口：2181,2376,2888,3888,6379
+
+
+
+
+
+
+MySQL 数据库
+至少 1GB 内存
+每 Rancher Server 节点 50">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多节点高可用(HA)">
+<meta property="og:url" content="http://strongit.github.io/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/index.html">
+<meta property="og:site_name" content="Strong It">
+<meta property="og:description" content="基于 Rancher v1.0.1需求
+多节点的HA配置请参照单一节点需求
+节点需要开放的端口
+全局访问：TCP 端口22,80,443,18080（可选：用于在集群启动前 查看并管理栈 ）
+节点间连接：
+UDP 端口：500,4500
+TCP 端口：2181,2376,2888,3888,6379
+
+
+
+
+
+
+MySQL 数据库
+至少 1GB 内存
+每 Rancher Server 节点 50">
+<meta property="og:updated_time" content="2016-07-01T02:32:15.460Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多节点高可用(HA)">
+<meta name="twitter:description" content="基于 Rancher v1.0.1需求
+多节点的HA配置请参照单一节点需求
+节点需要开放的端口
+全局访问：TCP 端口22,80,443,18080（可选：用于在集群启动前 查看并管理栈 ）
+节点间连接：
+UDP 端口：500,4500
+TCP 端口：2181,2376,2888,3888,6379
+
+
+
+
+
+
+MySQL 数据库
+至少 1GB 内存
+每 Rancher Server 节点 50">
+  
+    <link rel="alternative" href="/atom.xml" title="Strong It" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Strong It</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://strongit.blog.51cto.com/">创者思的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://xuzhougeng.top/">HopTop的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.17ce.com/">一起玩linux</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">从事Linux运维数年，专注于运维自动化、python</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Strong It</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="null" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Strong It</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-rancher-03-Installing-Rancher-Multi-Nodes" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/" class="article-date">
+  	<time datetime="2016-06-03T16:00:00.000Z" itemprop="datePublished">2016-06-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      多节点高可用(HA)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rancher/">rancher</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h6 id="基于-Rancher-v1-0-1"><a href="#基于-Rancher-v1-0-1" class="headerlink" title="基于 Rancher v1.0.1"></a>基于 Rancher v1.0.1</h6><h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><ul>
+<li>多节点的HA配置请参照单一节点<a href="">需求</a><ul>
+<li>节点需要开放的端口<ul>
+<li>全局访问：TCP 端口<code>22</code>,<code>80</code>,<code>443</code>,<code>18080</code>（可选：用于在集群启动前 <a href="">查看并管理栈</a> ）</li>
+<li>节点间连接：<ul>
+<li>UDP 端口：<code>500</code>,<code>4500</code></li>
+<li>TCP 端口：<code>2181</code>,<code>2376</code>,<code>2888</code>,<code>3888</code>,<code>6379</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MySQL 数据库<ul>
+<li>至少 1GB 内存</li>
+<li>每 Rancher Server 节点 50 连接（如：一个 3 节点的安装至少需要支持 150 连接）</li>
+</ul>
+</li>
+<li>外部负载均衡器</li>
+</ul>
+<h4 id="建议使用更大的部署"><a href="#建议使用更大的部署" class="headerlink" title="建议使用更大的部署"></a>建议使用更大的部署</h4><ul>
+<li>每个 Rancher Server 节点应该有 4GB 或 8GB 可用内存，意味着至少需要 8GB 或 16GB 的物理内存</li>
+<li>MySQL 数据库应该使用高速的磁盘</li>
+<li>对于真正的高可用，建议使用复制的 MySQL 并做适当的备份。由于存在事物锁，可以选择 Galera 或强制写入单节点的方式。</li>
+</ul>
+<h4 id="配置高可用-HA-的准备"><a href="#配置高可用-HA-的准备" class="headerlink" title="配置高可用(HA)的准备"></a>配置高可用(HA)的准备</h4><ol>
+<li>根据 <a href="">使用外部数据库启动单节点</a> 说明部署一个至少拥有 1GB 内存的 MySQL 数据库，但是不要使用其中启动 Rancher Server 的相关指令。因为默认情况下， 用户只能从本地访问数据库，你需要授权所有 Rancher Server 节点的网络。</li>
+<li>配置一个外部负载均衡器并将端口 80 和 443 的流量指向运行 Rancher Server 的节点池。</li>
+<li><p>使用这篇文档准备所有节点。这些节点都应该满足单节点部署 Rancher Server 的<a href="">需求</a>。（可选）您可以提前拉取 <code>rancher/server</code> 镜像到这些节点上。</p>
+<p> 目前，我们的高可用集群支持 3 种配置。<em> 1 节点：没有高可用 </em> 3 节点：任何一台主机可以宕机 * 5 节点：任何两台主机可以宕机</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>这些节点可以分布在同一个地区并使用稳定的高速链路连接的多个数据中心，不建议分布在过大的区域。如果你选择分布节点在同一个区域，Zookeeper 可以保证集群的高可用。如果你的节点分布在不同的数据中心，那么你只能保留问题最少的那个区域。</p>
+</blockquote>
+</li>
+<li><p>在其中一个节点上，启动一个 Rancher Server 用于生成配置脚本。下面这个脚本用于生成 Rancher Server 同时连接到外部数据库并初始化数据。它将被引导高可用部署过程。最终，Rancher Server 容器将使用此步骤替换为支持高可用的 Rancher Server 容器。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run -d -p 8080:8080 \</span><br><span class="line">-e CATTLE_DB_CATTLE_MYSQL_HOST=&lt;hostname or IP of MySQL instance&gt; \</span><br><span class="line">-e CATTLE_DB_CATTLE_MYSQL_PORT=&lt;port&gt; \</span><br><span class="line">-e CATTLE_DB_CATTLE_MYSQL_NAME=&lt;Name of Database&gt; \</span><br><span class="line">-e CATTLE_DB_CATTLE_USERNAME=&lt;Username&gt; \</span><br><span class="line">-e CATTLE_DB_CATTLE_PASSWORD=&lt;Password&gt; \</span><br><span class="line">-v /var/run/docker.sock:/var/run/docker.sock \</span><br><span class="line">rancher/server:v1.0.1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>请耐心等待，这个初始化步骤可能要15分钟才能完成</p>
+</blockquote>
+</li>
+<li><p>（可选）预先抓取 <code>rancher/server</code> 镜像到 Rancher 节点。这里抓取的镜像可用于配置脚本生成 Rancher Server 。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># The version would be whatever was used in Step 4</span><br><span class="line">$ sudo docker pull rancher/server:v1.0.1</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="生成配置脚本"><a href="#生成配置脚本" class="headerlink" title="生成配置脚本"></a>生成配置脚本</h4><ol>
+<li>访问 Rancher Server 地址 <code>http://&lt;server_IP&gt;:8080</code> 生成脚本。在 <strong>Admin</strong> -&gt; <strong>HA</strong> 确认 Rancher Server 已经成功连接到外部数据库。如果没有正确配置，请重复上一节中的步骤 1 和 4 。</li>
+<li>选择集群大小，应该为您的 Rancher Server 节点数量，参照上一节中步骤 3 。</li>
+<li>在 <strong>Host Registration URL</strong> 中填写外部负载均衡器的 IPv4 地址或主机名。</li>
+<li>选择您想使用的证书类型。Rancher Server 可以为您生成一个自签名证书或者使用自己的有效证书。</li>
+<li>点击 <strong>Generate Config Script</strong> 。</li>
+<li>下载脚本并保存到本地。</li>
+<li>保存脚本后，停止用于生成脚本的 Rancher Server 容器。</li>
+</ol>
+<h4 id="启动高可用的-Rancher"><a href="#启动高可用的-Rancher" class="headerlink" title="启动高可用的 Rancher"></a>启动高可用的 Rancher</h4><ol>
+<li><p>为了使所有节点支持高可用，你需要在所有节点上使用配置脚本启动 Rancher Server 。脚本将启动一个 Rancher Server 容器并连接到之前创建的外部数据库。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>请确保您已经停止用于生成脚本 <code>rancher-ha.sh</code> 的 Rancher Server 容器后再运行配置脚本。否则，在你尝试在同一个节点运行配置脚本时，将会有一个端口冲突导致高可用节点无法启动。</p>
+</blockquote>
+</li>
+<li><p>如果你之前生成配置脚本时提供了 <strong>Host Registration URL</strong> ，请导航到外部负载均衡器的 IP 或主机名。请注意，Rancher Server 的用户界面可能需要几分钟才可以使用。如果你的用户界面仍不可用，请参照 <a href="">查看并管理栈</a> 。</p>
+</li>
+<li>一旦用户界面可用，您将可以添加主机到 Rancher 高可用集群。在 <strong>Admin</strong> -&gt; <strong>HA</strong> 标签可以查看高可用节点的数量。添加主机前，您需要保存证书 <code>/var/lib/rancher/etc/ssl/ca.crt</code> 并赋予 <code>400</code> 权限到您要添加的主机上。注册命令可以自动创建使用并管理证书。</li>
+<li>在您向环境中添加主机后，高可用设置已经完成，您可以开始通过用户界面 <a href="">添加服务</a> ，从 Catalog <a href="">启动模板</a> 或使用 <a href="">rancher-compose</a> 启动服务。<blockquote>
+<p><strong>注意：</strong></p>
+<p>如果您正在使用 AWS ，你需要为添加到 Rancher 的主机配置 IP 。如果你想添加 <a href="">自定义主机</a> ，你需要在配置页面中填写公网 IP ，启动 Rancher agent 的命令会相应改变。已经通过页面添加的主机，必须 <a href="">ssh</a> 登陆到机器重启 Rancher agent 使 IP 生效。</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<blockquote>
+<p>译者： XiaoBao Zhang</p>
+<p>From： <a href="http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/" target="_blank" rel="external">http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/</a></p>
+</blockquote>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/05/01/zabbix-email/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Zabbix邮件报警脚本</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="rancher-03-Installing-Rancher-Multi-Nodes" data-title="多节点高可用(HA)" data-url="http://strongit.github.io/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Strong It
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
