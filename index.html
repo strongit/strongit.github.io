@@ -77,7 +77,7 @@
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -184,6 +184,134 @@
 
       <div class="body-wrap">
   
+    <article id="post-rancher-03-Installing-Rancher-Basic-Ssl-Config" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/10/rancher-03-Installing-Rancher-Basic-Ssl-Config/" class="article-date">
+  	<time datetime="2016-06-09T16:00:00.000Z" itemprop="datePublished">2016-06-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/10/rancher-03-Installing-Rancher-Basic-Ssl-Config/">SSL基本配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>为了可以正常使用 <code>https</code> 地址访问 Rancher 服务器，您需要设置代理的证书卸载功能。同时，我们提供了一些配置 NGINX 或 Apache 代理的例子，当然，您也可以使用其他工具。</p>
+<h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><p>除了典型的 Rancher 服务器 <a href="">需求</a> 您还需要：</p>
+<ul>
+<li>有效的 SSL 证书：如果您的证书不包含在 Ubuntu CA 中，请参照 <a href="">自签名证书说明</a> 。</li>
+<li>配置 DNS 记录。</li>
+</ul>
+<h4 id="启动-Rancher-服务器"><a href="#启动-Rancher-服务器" class="headerlink" title="启动 Rancher 服务器"></a>启动 Rancher 服务器</h4><p>在我们的示例配置方案中，所有流量将通过代理被发送到 Rancher 服务器的 Docker 容器中。也有替代的配置方案可以实现，但这个示例相对比较简单。<br>启动 Rancher 服务器，这里我们添加了选项 <code>--name=rancher-server</code> 用来连接代理容器和 Rancher 服务器容器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run -d --restart=always --name=rancher-server rancher/server</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>在我们的示例中，我们假设代理运行在单独的容器中。如果您的代理计划由主机提供服务，需要将 Rancher 容器的 <code>8080</code> 端口映射至本地主机，可以向 <code>docker run</code> 命令添加参数 <code>-p 127.0.0.1:8080:8080</code> 实现。</p>
+</blockquote>
+<p>如果您想使用现有的 Rancher 实例，您可以基于现有的 Rancher 实例创建一个新的 Rancher 实例。</p>
+<ul>
+<li>若 Rancher 实例的 MySQL 数据库运行在容器内，在启动新的 Rancher 实例时，请参照 <a href="">升级说明</a> 创建数据容器并且在启动时添加 <code>--volumes-from=&lt;data_container&gt;</code> 。</li>
+<li>若 Rancher 实例使用了 <a href="">绑定挂载数据库</a> 的方式，请参照 <a href="">绑定挂载实例升级说明</a>。</li>
+<li>若 Rancher 实例使用外部数据库，则直接停止并删除现有的 Rancher 实例容器，并参照 <a href="">外部数据库连接说明</a> 启动新的容器。</li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>在新的 Rancher 实例容器运行后，请确认已经 <strong>删除</strong> 了旧的 Rancher 实例容器，否则，在您的主机重启后，因为我们在 <code>docker run</code> 命令时加入了 <code>--restart=always</code> 参数，会导致旧容器启动。</p>
+</blockquote>
+<h3 id="NGINX-配置示例"><a href="#NGINX-配置示例" class="headerlink" title="NGINX 配置示例"></a>NGINX 配置示例</h3><p>这里的配置是 NGINX 运行的最低配置，您应该定制配置来满足您的需求。</p>
+<h4 id="节点设置"><a href="#节点设置" class="headerlink" title="节点设置"></a>节点设置</h4><ul>
+<li><code>rancher-server</code> 是您的 Rancher 服务器容器名。您必须在启动 Rancher 服务器容器的时候加入 <code>--name=rancher-server</code> 选项。并且在启动 NGINX 容器的时候加入 <code>--link=rancher-server</code> 选项才能使这些配置正常工作。</li>
+<li><code>&lt;server&gt;</code> 可以任意命名，但是必须保证 http 和 https 配置中的名称相同。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">upstream rancher &#123;</span><br><span class="line">    server rancher-server:8080;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name &lt;server&gt;;</span><br><span class="line">    ssl_certificate &lt;cert_file&gt;;</span><br><span class="line">    ssl_certificate_key &lt;key_file&gt;;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Forwarded-Port $server_port;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_pass http://rancher;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">        # This allows the ability for the execute shell window to remain open for up to 15 minutes. Without this parameter, the default is 1 minute and will automatically close.</span><br><span class="line">        proxy_read_timeout 900s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name &lt;server&gt;;</span><br><span class="line">    return 301 https://$server_name$request_uri;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="APACHE-配置示例"><a href="#APACHE-配置示例" class="headerlink" title="APACHE 配置示例"></a>APACHE 配置示例</h1><p>这是一个 Apache 的配置。</p>
+<h4 id="节点设置-1"><a href="#节点设置-1" class="headerlink" title="节点设置"></a>节点设置</h4><ul>
+<li><code>&lt;server_name&gt;</code> 是您 Rancher 服务器容器的名字，所以在启动 Apache 容器时需要加入 <code>--link=&lt;server_name&gt;</code> 才能使配置正常工作。</li>
+<li>在代理配置中，您需要替换 <code>rancher</code> 为您的信息。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">  ServerName &lt;server_name&gt;</span><br><span class="line">  Redirect / https://&lt;server_name&gt;/</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost *:443&gt;</span><br><span class="line">  ServerName &lt;server_name&gt;</span><br><span class="line"></span><br><span class="line">  SSLEngine on</span><br><span class="line">  SSLCertificateFile &lt;/path/to/ssl/cert_file&gt;</span><br><span class="line">  SSLCertificateKeyFile &lt;/path/to/ssl/key_file&gt;</span><br><span class="line"></span><br><span class="line">  ProxyRequests Off</span><br><span class="line">  ProxyPreserveHost On</span><br><span class="line"></span><br><span class="line">  RewriteEngine On</span><br><span class="line">  RewriteCond %&#123;HTTP:Connection&#125; Upgrade [NC]</span><br><span class="line">  RewriteCond %&#123;HTTP:Upgrade&#125; websocket [NC]</span><br><span class="line">  RewriteRule /(.*) ws://rancher:8080/$1 [P,L]</span><br><span class="line"></span><br><span class="line">  RequestHeader set X-Forwarded-Proto &quot;https&quot;</span><br><span class="line">  RequestHeader set X-Forwarded-Port &quot;443&quot;</span><br><span class="line"></span><br><span class="line">  &lt;Location /&gt;</span><br><span class="line">    ProxyPass &quot;http://rancher:8080/&quot;</span><br><span class="line">    ProxyPassReverse &quot;http://rancher:8080/&quot;</span><br><span class="line">  &lt;/Location&gt;</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="更新主机注册"><a href="#更新主机注册" class="headerlink" title="更新主机注册"></a>更新主机注册</h2><p>在 Rancher 配置完成后，用户界面将使用 <code>https://&lt;your domain&gt;/</code> 访问。在 <a href="">添加主机</a> 之前，您需要正确配置 SSL 方式的 <a href="">主机注册</a> 地址。</p>
+<h2 id="在-AWS-ELB-后使用-SSL-运行-Rancher"><a href="#在-AWS-ELB-后使用-SSL-运行-Rancher" class="headerlink" title="在 AWS ELB 后使用 SSL 运行 Rancher"></a>在 AWS ELB 后使用 SSL 运行 Rancher</h2><p>默认情况下，ELB 不支持在 HTTP/HTTPS 模式下启用 websockets 。由于 Rancher 使用了 websockets ，则 ELB 必须修改配置以便 Rancher 的 websockets 可以正常工作。</p>
+<h4 id="Rancher-的-ELB-配置需求"><a href="#Rancher-的-ELB-配置需求" class="headerlink" title="Rancher 的 ELB 配置需求"></a>Rancher 的 ELB 配置需求</h4><ul>
+<li>启用 <a href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/enable-proxy-protocol.html" target="_blank" rel="external">代理协议</a> 模式</li>
+<li>配置 TLS/SSL 方式的前端以及 TCP 方式的后端</li>
+</ul>
+<h2 id="使用自签名证书（测试）"><a href="#使用自签名证书（测试）" class="headerlink" title="使用自签名证书（测试）"></a>使用自签名证书（测试）</h2><h4 id="免责声明"><a href="#免责声明" class="headerlink" title="免责声明"></a>免责声明</h4><p>这个配置可以工作在单节点 Rancher 服务器（非HA安装）模式的核心服务上，没有人验证是否支持 <a href="">Rancher 目录</a> 是否被支持。</p>
+<p>Rancher Compose 命令行默认需要将 CA 证书存储在操作系统，请参照 <a href="https://golang.org/src/crypto/x509/" target="_blank" rel="external">Golang</a>。</p>
+<h4 id="服务器必备条件"><a href="#服务器必备条件" class="headerlink" title="服务器必备条件"></a>服务器必备条件</h4><ul>
+<li>CA 证书 PEM 格式的文件</li>
+<li>已经签署证书的 Rancher 服务器</li>
+<li>NGINX 和 Apache 配置证书卸载，并反向代理到 Rancher 服务器</li>
+</ul>
+<h4 id="Rancher-服务器"><a href="#Rancher-服务器" class="headerlink" title="Rancher 服务器"></a>Rancher 服务器</h4><ol>
+<li><p>使用修改后的 Docker 命令启动 Rancher 服务器容器。证书 <strong>必须</strong> 在容器中被命名为 <code>ca.crt</code>。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run -d --restart=always -p 8080:8080 -v /some/dir/cert.crt:/ca.crt rancher/server</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>如果你正在运行 NGINX 或 Apache 容器，您可以直接访问这些实例，不需要通过 Rancher 服务器的 8080 端口访问用户界面。<br> 这条命令将会配置 Rancher 服务器的证书链，所以 Rancher 的服务，如机器配置，目录和 compose 均可以和 Rancher 服务器通讯。</p>
+</blockquote>
+</li>
+<li><p>如果您正在使用一个 NGINX 或 Apache 容器卸载证书，您需要在启动容器的命令增加 <code>--link=</code> 选项。</p>
+</li>
+<li>通过 <code>https</code> 访问 Rancher 用户界面，即 <code>https://rancher.server.domain</code> 。</li>
+<li>更新 <a href="">主机注册</a> 为 SSL 方式。<blockquote>
+<p><strong>注意：</strong></p>
+<p>除非您的机器信任了用于签署 Rancher 服务器的 CA 证书，否则当你访问页面时，浏览器会给出一个不可信网站的警告信息。</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="添加主机"><a href="#添加主机" class="headerlink" title="添加主机"></a>添加主机</h4><ol>
+<li>如果您想添加主机到 Rancher ，您必须在主机上以 pem 格式将 CA 证书保存到 <code>/var/lib/rancher/etc/ssl</code> 目录并命名为 <code>ca.crt</code> 。</li>
+<li>添加 <a href="">自定义主机</a> ，也就是从用户界面粘贴命令。命令已经加入了 <code>-v /var/lib/rancher:/var/lib/rancher</code> 选项，所以文件会被自动复制到您的主机上。</li>
+</ol>
+<hr>
+<blockquote>
+<p>From： <a href="http://docs.rancher.com/rancher/latest/en/installing-rancher/installing-server/basic-ssl-config/" target="_blank" rel="external">http://docs.rancher.com/rancher/latest/en/installing-rancher/installing-server/basic-ssl-config/</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rancher/">rancher</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-rancher-03-Installing-Rancher-Multi-Nodes" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -283,7 +411,6 @@
 </ol>
 <hr>
 <blockquote>
-<p>译者： XiaoBao Zhang</p>
 <p>From： <a href="http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/" target="_blank" rel="external">http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/</a></p>
 </blockquote>
 
@@ -474,7 +601,6 @@
 <p>在 Rancher 中 <a href="!--￼10--&gt;/rancher/installing-rancher/add-host/">添加主机</a> ，无需使用 HTTP 代理。</p>
 <hr>
 <blockquote>
-<p>译者： XiaoBao Zhang</p>
 <p>From： <a href="http://docs.rancher.com/rancher/installing-rancher/installing-server/" target="_blank" rel="external">http://docs.rancher.com/rancher/installing-rancher/installing-server/</a></p>
 </blockquote>
 

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://strongit.github.io/"/>
-  <updated>2016-07-01T02:32:15.460Z</updated>
+  <updated>2016-07-05T07:09:58.400Z</updated>
   <id>http://strongit.github.io/</id>
   
   <author>
@@ -16,11 +16,104 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>SSL基本配置</title>
+    <link href="http://strongit.github.io/2016/06/10/rancher-03-Installing-Rancher-Basic-Ssl-Config/"/>
+    <id>http://strongit.github.io/2016/06/10/rancher-03-Installing-Rancher-Basic-Ssl-Config/</id>
+    <published>2016-06-09T16:00:00.000Z</published>
+    <updated>2016-07-05T07:09:58.400Z</updated>
+    
+    <content type="html">&lt;p&gt;为了可以正常使用 &lt;code&gt;https&lt;/code&gt; 地址访问 Rancher 服务器，您需要设置代理的证书卸载功能。同时，我们提供了一些配置 NGINX 或 Apache 代理的例子，当然，您也可以使用其他工具。&lt;/p&gt;
+&lt;h4 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot; title=&quot;需求&quot;&gt;&lt;/a&gt;需求&lt;/h4&gt;&lt;p&gt;除了典型的 Rancher 服务器 &lt;a href=&quot;&quot;&gt;需求&lt;/a&gt; 您还需要：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;有效的 SSL 证书：如果您的证书不包含在 Ubuntu CA 中，请参照 &lt;a href=&quot;&quot;&gt;自签名证书说明&lt;/a&gt; 。&lt;/li&gt;
+&lt;li&gt;配置 DNS 记录。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;启动-Rancher-服务器&quot;&gt;&lt;a href=&quot;#启动-Rancher-服务器&quot; class=&quot;headerlink&quot; title=&quot;启动 Rancher 服务器&quot;&gt;&lt;/a&gt;启动 Rancher 服务器&lt;/h4&gt;&lt;p&gt;在我们的示例配置方案中，所有流量将通过代理被发送到 Rancher 服务器的 Docker 容器中。也有替代的配置方案可以实现，但这个示例相对比较简单。&lt;br&gt;启动 Rancher 服务器，这里我们添加了选项 &lt;code&gt;--name=rancher-server&lt;/code&gt; 用来连接代理容器和 Rancher 服务器容器。&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ sudo docker run -d --restart=always --name=rancher-server rancher/server&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在我们的示例中，我们假设代理运行在单独的容器中。如果您的代理计划由主机提供服务，需要将 Rancher 容器的 &lt;code&gt;8080&lt;/code&gt; 端口映射至本地主机，可以向 &lt;code&gt;docker run&lt;/code&gt; 命令添加参数 &lt;code&gt;-p 127.0.0.1:8080:8080&lt;/code&gt; 实现。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果您想使用现有的 Rancher 实例，您可以基于现有的 Rancher 实例创建一个新的 Rancher 实例。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;若 Rancher 实例的 MySQL 数据库运行在容器内，在启动新的 Rancher 实例时，请参照 &lt;a href=&quot;&quot;&gt;升级说明&lt;/a&gt; 创建数据容器并且在启动时添加 &lt;code&gt;--volumes-from=&amp;lt;data_container&amp;gt;&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;若 Rancher 实例使用了 &lt;a href=&quot;&quot;&gt;绑定挂载数据库&lt;/a&gt; 的方式，请参照 &lt;a href=&quot;&quot;&gt;绑定挂载实例升级说明&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;若 Rancher 实例使用外部数据库，则直接停止并删除现有的 Rancher 实例容器，并参照 &lt;a href=&quot;&quot;&gt;外部数据库连接说明&lt;/a&gt; 启动新的容器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在新的 Rancher 实例容器运行后，请确认已经 &lt;strong&gt;删除&lt;/strong&gt; 了旧的 Rancher 实例容器，否则，在您的主机重启后，因为我们在 &lt;code&gt;docker run&lt;/code&gt; 命令时加入了 &lt;code&gt;--restart=always&lt;/code&gt; 参数，会导致旧容器启动。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;NGINX-配置示例&quot;&gt;&lt;a href=&quot;#NGINX-配置示例&quot; class=&quot;headerlink&quot; title=&quot;NGINX 配置示例&quot;&gt;&lt;/a&gt;NGINX 配置示例&lt;/h3&gt;&lt;p&gt;这里的配置是 NGINX 运行的最低配置，您应该定制配置来满足您的需求。&lt;/p&gt;
+&lt;h4 id=&quot;节点设置&quot;&gt;&lt;a href=&quot;#节点设置&quot; class=&quot;headerlink&quot; title=&quot;节点设置&quot;&gt;&lt;/a&gt;节点设置&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rancher-server&lt;/code&gt; 是您的 Rancher 服务器容器名。您必须在启动 Rancher 服务器容器的时候加入 &lt;code&gt;--name=rancher-server&lt;/code&gt; 选项。并且在启动 NGINX 容器的时候加入 &lt;code&gt;--link=rancher-server&lt;/code&gt; 选项才能使这些配置正常工作。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;server&amp;gt;&lt;/code&gt; 可以任意命名，但是必须保证 http 和 https 配置中的名称相同。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;upstream rancher &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    server rancher-server:8080;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;server &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    listen 443 ssl;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    server_name &amp;lt;server&amp;gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    ssl_certificate &amp;lt;cert_file&amp;gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    ssl_certificate_key &amp;lt;key_file&amp;gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    location / &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        proxy_set_header Host $host;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        proxy_set_header X-Forwarded-Proto $scheme;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        proxy_set_header X-Forwarded-Port $server_port;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        proxy_pass http://rancher;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        proxy_http_version 1.1;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        proxy_set_header Upgrade $http_upgrade;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        proxy_set_header Connection &amp;quot;upgrade&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        # This allows the ability for the execute shell window to remain open for up to 15 minutes. Without this parameter, the default is 1 minute and will automatically close.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        proxy_read_timeout 900s;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;server &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    listen 80;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    server_name &amp;lt;server&amp;gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    return 301 https://$server_name$request_uri;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h1 id=&quot;APACHE-配置示例&quot;&gt;&lt;a href=&quot;#APACHE-配置示例&quot; class=&quot;headerlink&quot; title=&quot;APACHE 配置示例&quot;&gt;&lt;/a&gt;APACHE 配置示例&lt;/h1&gt;&lt;p&gt;这是一个 Apache 的配置。&lt;/p&gt;
+&lt;h4 id=&quot;节点设置-1&quot;&gt;&lt;a href=&quot;#节点设置-1&quot; class=&quot;headerlink&quot; title=&quot;节点设置&quot;&gt;&lt;/a&gt;节点设置&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;server_name&amp;gt;&lt;/code&gt; 是您 Rancher 服务器容器的名字，所以在启动 Apache 容器时需要加入 &lt;code&gt;--link=&amp;lt;server_name&amp;gt;&lt;/code&gt; 才能使配置正常工作。&lt;/li&gt;
+&lt;li&gt;在代理配置中，您需要替换 &lt;code&gt;rancher&lt;/code&gt; 为您的信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;VirtualHost *:80&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  ServerName &amp;lt;server_name&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Redirect / https://&amp;lt;server_name&amp;gt;/&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;/VirtualHost&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;VirtualHost *:443&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  ServerName &amp;lt;server_name&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  SSLEngine on&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  SSLCertificateFile &amp;lt;/path/to/ssl/cert_file&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  SSLCertificateKeyFile &amp;lt;/path/to/ssl/key_file&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  ProxyRequests Off&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  ProxyPreserveHost On&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  RewriteEngine On&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  RewriteCond %&amp;#123;HTTP:Connection&amp;#125; Upgrade [NC]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  RewriteCond %&amp;#123;HTTP:Upgrade&amp;#125; websocket [NC]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  RewriteRule /(.*) ws://rancher:8080/$1 [P,L]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  RequestHeader set X-Forwarded-Proto &amp;quot;https&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  RequestHeader set X-Forwarded-Port &amp;quot;443&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;lt;Location /&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    ProxyPass &amp;quot;http://rancher:8080/&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    ProxyPassReverse &amp;quot;http://rancher:8080/&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;lt;/Location&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;/VirtualHost&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;更新主机注册&quot;&gt;&lt;a href=&quot;#更新主机注册&quot; class=&quot;headerlink&quot; title=&quot;更新主机注册&quot;&gt;&lt;/a&gt;更新主机注册&lt;/h2&gt;&lt;p&gt;在 Rancher 配置完成后，用户界面将使用 &lt;code&gt;https://&amp;lt;your domain&amp;gt;/&lt;/code&gt; 访问。在 &lt;a href=&quot;&quot;&gt;添加主机&lt;/a&gt; 之前，您需要正确配置 SSL 方式的 &lt;a href=&quot;&quot;&gt;主机注册&lt;/a&gt; 地址。&lt;/p&gt;
+&lt;h2 id=&quot;在-AWS-ELB-后使用-SSL-运行-Rancher&quot;&gt;&lt;a href=&quot;#在-AWS-ELB-后使用-SSL-运行-Rancher&quot; class=&quot;headerlink&quot; title=&quot;在 AWS ELB 后使用 SSL 运行 Rancher&quot;&gt;&lt;/a&gt;在 AWS ELB 后使用 SSL 运行 Rancher&lt;/h2&gt;&lt;p&gt;默认情况下，ELB 不支持在 HTTP/HTTPS 模式下启用 websockets 。由于 Rancher 使用了 websockets ，则 ELB 必须修改配置以便 Rancher 的 websockets 可以正常工作。&lt;/p&gt;
+&lt;h4 id=&quot;Rancher-的-ELB-配置需求&quot;&gt;&lt;a href=&quot;#Rancher-的-ELB-配置需求&quot; class=&quot;headerlink&quot; title=&quot;Rancher 的 ELB 配置需求&quot;&gt;&lt;/a&gt;Rancher 的 ELB 配置需求&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;启用 &lt;a href=&quot;http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/enable-proxy-protocol.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;代理协议&lt;/a&gt; 模式&lt;/li&gt;
+&lt;li&gt;配置 TLS/SSL 方式的前端以及 TCP 方式的后端&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;使用自签名证书（测试）&quot;&gt;&lt;a href=&quot;#使用自签名证书（测试）&quot; class=&quot;headerlink&quot; title=&quot;使用自签名证书（测试）&quot;&gt;&lt;/a&gt;使用自签名证书（测试）&lt;/h2&gt;&lt;h4 id=&quot;免责声明&quot;&gt;&lt;a href=&quot;#免责声明&quot; class=&quot;headerlink&quot; title=&quot;免责声明&quot;&gt;&lt;/a&gt;免责声明&lt;/h4&gt;&lt;p&gt;这个配置可以工作在单节点 Rancher 服务器（非HA安装）模式的核心服务上，没有人验证是否支持 &lt;a href=&quot;&quot;&gt;Rancher 目录&lt;/a&gt; 是否被支持。&lt;/p&gt;
+&lt;p&gt;Rancher Compose 命令行默认需要将 CA 证书存储在操作系统，请参照 &lt;a href=&quot;https://golang.org/src/crypto/x509/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Golang&lt;/a&gt;。&lt;/p&gt;
+&lt;h4 id=&quot;服务器必备条件&quot;&gt;&lt;a href=&quot;#服务器必备条件&quot; class=&quot;headerlink&quot; title=&quot;服务器必备条件&quot;&gt;&lt;/a&gt;服务器必备条件&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;CA 证书 PEM 格式的文件&lt;/li&gt;
+&lt;li&gt;已经签署证书的 Rancher 服务器&lt;/li&gt;
+&lt;li&gt;NGINX 和 Apache 配置证书卸载，并反向代理到 Rancher 服务器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;Rancher-服务器&quot;&gt;&lt;a href=&quot;#Rancher-服务器&quot; class=&quot;headerlink&quot; title=&quot;Rancher 服务器&quot;&gt;&lt;/a&gt;Rancher 服务器&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;使用修改后的 Docker 命令启动 Rancher 服务器容器。证书 &lt;strong&gt;必须&lt;/strong&gt; 在容器中被命名为 &lt;code&gt;ca.crt&lt;/code&gt;。&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ sudo docker run -d --restart=always -p 8080:8080 -v /some/dir/cert.crt:/ca.crt rancher/server&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如果你正在运行 NGINX 或 Apache 容器，您可以直接访问这些实例，不需要通过 Rancher 服务器的 8080 端口访问用户界面。&lt;br&gt; 这条命令将会配置 Rancher 服务器的证书链，所以 Rancher 的服务，如机器配置，目录和 compose 均可以和 Rancher 服务器通讯。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果您正在使用一个 NGINX 或 Apache 容器卸载证书，您需要在启动容器的命令增加 &lt;code&gt;--link=&lt;/code&gt; 选项。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;通过 &lt;code&gt;https&lt;/code&gt; 访问 Rancher 用户界面，即 &lt;code&gt;https://rancher.server.domain&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;更新 &lt;a href=&quot;&quot;&gt;主机注册&lt;/a&gt; 为 SSL 方式。&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;除非您的机器信任了用于签署 Rancher 服务器的 CA 证书，否则当你访问页面时，浏览器会给出一个不可信网站的警告信息。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&quot;添加主机&quot;&gt;&lt;a href=&quot;#添加主机&quot; class=&quot;headerlink&quot; title=&quot;添加主机&quot;&gt;&lt;/a&gt;添加主机&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;如果您想添加主机到 Rancher ，您必须在主机上以 pem 格式将 CA 证书保存到 &lt;code&gt;/var/lib/rancher/etc/ssl&lt;/code&gt; 目录并命名为 &lt;code&gt;ca.crt&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;添加 &lt;a href=&quot;&quot;&gt;自定义主机&lt;/a&gt; ，也就是从用户界面粘贴命令。命令已经加入了 &lt;code&gt;-v /var/lib/rancher:/var/lib/rancher&lt;/code&gt; 选项，所以文件会被自动复制到您的主机上。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;From： &lt;a href=&quot;http://docs.rancher.com/rancher/latest/en/installing-rancher/installing-server/basic-ssl-config/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://docs.rancher.com/rancher/latest/en/installing-rancher/installing-server/basic-ssl-config/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;为了可以正常使用 &lt;code&gt;https&lt;/code&gt; 地址访问 Rancher 服务器，您需要设置代理的证书卸载功能。同时，我们提供了一些配置 NGINX 或 Apache 代理的例子，当然，您也可以使用其他工具。&lt;/p&gt;
+&lt;h4 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求
+    
+    </summary>
+    
+    
+      <category term="rancher" scheme="http://strongit.github.io/tags/rancher/"/>
+    
+  </entry>
+  
+  <entry>
     <title>多节点高可用(HA)</title>
     <link href="http://strongit.github.io/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/"/>
     <id>http://strongit.github.io/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/</id>
     <published>2016-06-03T16:00:00.000Z</published>
-    <updated>2016-07-01T02:32:15.460Z</updated>
+    <updated>2016-07-05T07:09:35.453Z</updated>
     
     <content type="html">&lt;h6 id=&quot;基于-Rancher-v1-0-1&quot;&gt;&lt;a href=&quot;#基于-Rancher-v1-0-1&quot; class=&quot;headerlink&quot; title=&quot;基于 Rancher v1.0.1&quot;&gt;&lt;/a&gt;基于 Rancher v1.0.1&lt;/h6&gt;&lt;h4 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot; title=&quot;需求&quot;&gt;&lt;/a&gt;需求&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;多节点的HA配置请参照单一节点&lt;a href=&quot;&quot;&gt;需求&lt;/a&gt;&lt;ul&gt;
@@ -95,7 +188,6 @@
 &lt;/ol&gt;
 &lt;hr&gt;
 &lt;blockquote&gt;
-&lt;p&gt;译者： XiaoBao Zhang&lt;/p&gt;
 &lt;p&gt;From： &lt;a href=&quot;http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 </content>
@@ -161,7 +253,7 @@
     <link href="http://strongit.github.io/2016/04/28/rancher-03-Installing-Rancher-Single-Node/"/>
     <id>http://strongit.github.io/2016/04/28/rancher-03-Installing-Rancher-Single-Node/</id>
     <published>2016-04-27T16:00:00.000Z</published>
-    <updated>2016-04-28T17:48:20.000Z</updated>
+    <updated>2016-07-05T07:08:59.772Z</updated>
     
     <content type="html">&lt;p&gt;Rancher 使用基于 Docker 容器的部署方式。仅需简单的启动两个容器即可运行。一个容器用于管理 Rancher 服务，其他容器使用代理的方式管理主机或节点。&lt;/p&gt;
 &lt;h4 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot; title=&quot;需求&quot;&gt;&lt;/a&gt;需求&lt;/h4&gt;&lt;ul&gt;
@@ -214,7 +306,6 @@
 &lt;p&gt;在 Rancher 中 &lt;a href=&quot;!--￼10--&amp;gt;/rancher/installing-rancher/add-host/&quot;&gt;添加主机&lt;/a&gt; ，无需使用 HTTP 代理。&lt;/p&gt;
 &lt;hr&gt;
 &lt;blockquote&gt;
-&lt;p&gt;译者： XiaoBao Zhang&lt;/p&gt;
 &lt;p&gt;From： &lt;a href=&quot;http://docs.rancher.com/rancher/installing-rancher/installing-server/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://docs.rancher.com/rancher/installing-rancher/installing-server/&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 </content>
