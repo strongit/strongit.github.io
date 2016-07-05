@@ -184,6 +184,87 @@
 
       <div class="body-wrap">
   
+    <article id="post-zabbix-email" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/01/zabbix-email/" class="article-date">
+  	<time datetime="2016-04-30T16:00:00.000Z" itemprop="datePublished">2016-05-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/01/zabbix-email/">Zabbix邮件报警脚本</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Zabbix安装教程请移步 <a href="http://strongit.blog.51cto.com/10020534/1709616" target="_blank" rel="external">Zabbix Install</a><br>zabbix邮件报警配置步骤说明：</p>
+<blockquote>
+<p>1、准备一个发送邮件的脚本</p>
+<p>2、修改zabbix配置文件中指定的脚本路径</p>
+<p>3、关联脚本名称</p>
+<p>4、用户设置收件邮箱与报警时间</p>
+<p>5、配置报警触发器</p>
+<p>6、添加多个用户，同时给多个人发邮件</p>
+<p>7、邮件接收测试</p>
+</blockquote>
+<h3 id="1、发送邮件的脚本"><a href="#1、发送邮件的脚本" class="headerlink" title="1、发送邮件的脚本"></a>1、发送邮件的脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># author:Strong It</span></span><br><span class="line"><span class="comment"># send zabbix message by email,usage: ./zabbix_email.py 收件人 标题 邮件内容</span></span><br><span class="line"></span><br><span class="line">import smtplib</span><br><span class="line">import sys</span><br><span class="line">import time</span><br><span class="line">from email.MIMEText import MIMEText</span><br><span class="line">from email.Header import Header</span><br><span class="line">from email.utils import parseaddr, formataddr</span><br><span class="line">from email import encoders</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf8'</span>)</span><br><span class="line">current_time=time.strftime(<span class="string">'%Y-%m-%d  %H:%M'</span>,time.localtime(time.time()))</span><br><span class="line">  </span><br><span class="line">mail_host =<span class="string">'smtp.exmail.qq.com'</span></span><br><span class="line">mail_user =<span class="string">'Strong It@*****.com'</span></span><br><span class="line">mail_<span class="built_in">pwd</span> = <span class="string">'*****'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#地址格式化函数</span></span><br><span class="line">def _format_addr(s):</span><br><span class="line">    name, addr = parseaddr(s)</span><br><span class="line">    <span class="built_in">return</span> formataddr(( \</span><br><span class="line">        Header(name, <span class="string">'utf-8'</span>).encode(), \</span><br><span class="line">        addr.encode(<span class="string">'utf-8'</span>) <span class="keyword">if</span> isinstance(addr, unicode) <span class="keyword">else</span> addr))</span><br><span class="line"></span><br><span class="line"><span class="comment">#发送邮件函数</span></span><br><span class="line">def send_email( content,mailto, get_sub ):</span><br><span class="line">    msg = MIMEText( content,_subtype = <span class="string">'plain'</span>, _charset = <span class="string">'utf-8'</span>)</span><br><span class="line">    <span class="comment">#msg = MIMEText(content,_subtype='plain',_charset='gb2312')</span></span><br><span class="line">    msg[<span class="string">'From'</span>] = _format_addr(u<span class="string">'Zabbix监控 &lt;%s&gt;'</span> % mail_user)</span><br><span class="line">    msg[<span class="string">'Subject'</span>] = _format_addr(u<span class="string">'报警信息 &lt;%s&gt;'</span> % get_sub)</span><br><span class="line">    msg[<span class="string">'To'</span>] = <span class="string">","</span>.join( mailto )  <span class="comment">#多邮件账号格式用,分开</span></span><br><span class="line">    try:</span><br><span class="line">        s = smtplib.SMTP_SSL( mail_host, 465)       </span><br><span class="line">        <span class="comment">#s = smtplib.SMTP( mail_host, 25)       </span></span><br><span class="line">        s.login(mail_user, mail_<span class="built_in">pwd</span> )</span><br><span class="line">        s.sendmail(mail_user, mailto,msg.as_string())</span><br><span class="line">        s.close()</span><br><span class="line">    except Exception as e:</span><br><span class="line">        <span class="built_in">return</span> <span class="string">'Exception: '</span>, e</span><br><span class="line"></span><br><span class="line"><span class="comment">#注意以下格式对齐</span></span><br><span class="line">title = sys.argv[2]</span><br><span class="line">cont = <span class="string">""</span><span class="string">"</span><br><span class="line">---------------------------------</span><br><span class="line">摘要：  </span><br><span class="line">%s</span><br><span class="line">---------------------------------</span><br><span class="line">时间：  %s</span><br><span class="line">---------------------------------</span><br><span class="line">  </span><br><span class="line">"</span><span class="string">""</span>%(sys.argv[3],current_time)</span><br><span class="line">  </span><br><span class="line">to_list = [</span><br><span class="line">         <span class="string">'%s'</span>%(sys.argv[1]),</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line"><span class="comment">#发送邮件的日志记录到/tmp/sendmail.log</span></span><br><span class="line">with open(<span class="string">'/tmp/sendmail_qs.log'</span>,<span class="string">'ab'</span>) as f:</span><br><span class="line">    f.write(<span class="string">'%s  Receive address:  %s Title: %s \n'</span>%(current_time,sys.argv[1],title))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    send_email( cont, to_list, title)</span><br></pre></td></tr></table></figure>
+<p>脚本名称：zabbix_email.py，使用格式：./zabbix_email.py 收件人 标题 邮件内容</p>
+<h3 id="2、更改zabbix配置文件的脚本路径"><a href="#2、更改zabbix配置文件的脚本路径" class="headerlink" title="2、更改zabbix配置文件的脚本路径"></a>2、更改zabbix配置文件的脚本路径</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix alertscripts]<span class="comment"># cat /etc/zabbix/zabbix_server.conf |grep AlertScriptsPath</span></span><br><span class="line"><span class="comment">### Option: AlertScriptsPath</span></span><br><span class="line"><span class="comment"># AlertScriptsPath=$&#123;datadir&#125;/zabbix/alertscripts</span></span><br><span class="line">AlertScriptsPath=/usr/lib/zabbix/alertscripts</span><br></pre></td></tr></table></figure>
+<h3 id="3、关联脚本名称"><a href="#3、关联脚本名称" class="headerlink" title="3、关联脚本名称"></a>3、关联脚本名称</h3><p>【Administration –&gt; Media types】</p>
+<p><img src="/img/media-types.png" alt=""></p>
+<h3 id="4、用户设置收件邮箱与报警时间"><a href="#4、用户设置收件邮箱与报警时间" class="headerlink" title="4、用户设置收件邮箱与报警时间"></a>4、用户设置收件邮箱与报警时间</h3><p>【Administration –&gt; Users】</p>
+<p><img src="/img/zabbix-user.png" alt=""></p>
+<p><img src="/img/user-permission.png" alt=""></p>
+<h3 id="5、配置报警触发器"><a href="#5、配置报警触发器" class="headerlink" title="5、配置报警触发器"></a>5、配置报警触发器</h3><p>【Configuration –&gt; Actions】</p>
+<p><img src="/img/zabbix-action.png" alt=""></p>
+<p><img src="/img/action-operation.png" alt=""></p>
+<h3 id="6、添加多个用户，同时给多个人发邮件"><a href="#6、添加多个用户，同时给多个人发邮件" class="headerlink" title="6、添加多个用户，同时给多个人发邮件"></a>6、添加多个用户，同时给多个人发邮件</h3><p>【Administration –&gt; Users】</p>
+<p><img src="/img/multi-user.png" alt=""></p>
+<h3 id="7、接收邮件报警测试"><a href="#7、接收邮件报警测试" class="headerlink" title="7、接收邮件报警测试"></a>7、接收邮件报警测试</h3><p><img src="/img/test-email.png" alt=""></p>
+<p>至此，Zabbix邮件告警已完成。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-rancher-03-Installing-Rancher-Single-Node" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -293,148 +374,9 @@
 
 
   
-    <article id="post-EMOS" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/04/23/EMOS/" class="article-date">
-  	<time datetime="2016-04-22T16:00:00.000Z" itemprop="datePublished">2016-04-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/23/EMOS/">EMOS的安装与使用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>EMOS是一个基于CentOS，集成了ExtMail Server全部组件的小型Linux系统，10分钟即可完成安装及配置，成为完备的企业邮局系统。它的诞生将彻底改变邮件系统复杂的安装和配置局面，使只具备基本linux知识的用户就可轻松架设邮局。</p>
-<h2 id="获取软件"><a href="#获取软件" class="headerlink" title="获取软件"></a>获取软件</h2><h3 id="百度云盘地址："><a href="#百度云盘地址：" class="headerlink" title="百度云盘地址："></a>百度云盘地址：</h3><p><a href="http://pan.baidu.com/s/1nvaSrUh" target="_blank" rel="external">EMOS</a> 访问密码：lcr4</p>
-<h3 id="yum安装方式："><a href="#yum安装方式：" class="headerlink" title="yum安装方式："></a>yum安装方式：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@emos /]<span class="comment"># vi /etc/yum.repos.d/EMOS-Base.repo</span></span><br><span class="line"><span class="comment"># EMOS-Base.repo</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Created by ExtMail Dev Team: http://www.extmail.org/</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># $Id$</span></span><br><span class="line"></span><br><span class="line">[EMOS-base]</span><br><span class="line">name=EMOS-Base</span><br><span class="line">baseurl=http://mirror.extmail.org/yum/emos/1.5/os/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=0</span><br><span class="line">protect=0</span><br><span class="line"></span><br><span class="line">[EMOS-update]</span><br><span class="line">name=EMOS-Updates</span><br><span class="line">baseurl=http://mirror.extmail.org/yum/emos/1.5/updates/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=0</span><br><span class="line">protect=0</span><br></pre></td></tr></table></figure>
-<p>保存后，然后尝试执行一下yum list 等操作，看看是否已经成功；</p>
-<h2 id="使用技巧："><a href="#使用技巧：" class="headerlink" title="使用技巧："></a>使用技巧：</h2><p>安装过程很简单，以下是使用过后觉得可以优化的地方：</p>
-<h3 id="webmail中设置显示默认域名，不显示ip"><a href="#webmail中设置显示默认域名，不显示ip" class="headerlink" title="webmail中设置显示默认域名，不显示ip"></a>webmail中设置显示默认域名，不显示ip</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@emos /]<span class="comment"># vi /var/www/extsuite/extmail/html/default/index.html</span></span><br><span class="line">156                 &lt;TD&gt;&lt;%password%&gt;&lt;/TD&gt;</span><br><span class="line">157                 &lt;TD&gt;&lt;INPUT TYPE=<span class="string">"password"</span> class=<span class="string">"input_n"</span> NAME=<span class="string">"password"</span>&gt;&lt;/TD&gt;</span><br><span class="line">158         &lt;/TR&gt;</span><br><span class="line">159         &lt;TR&gt;</span><br><span class="line">160                 &lt;TD&gt;&lt;%domain%&gt;&lt;/TD&gt;</span><br><span class="line">161                 &lt;TD&gt;&lt;INPUT TYPE=<span class="string">"text"</span> class=<span class="string">"input_n"</span> NAME=<span class="string">"domain"</span> value=<span class="string">"域名"</span>&gt;&lt;/TD&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="官方wiki"><a href="#官方wiki" class="headerlink" title="官方wiki"></a>官方wiki</h3><p><a href="http://wiki.extmail.org/doku.php" target="_blank" rel="external">Main Page</a><br><a href="http://www.extmail.org/forum/forum-15-1.html" target="_blank" rel="external">forum</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Extmail/">Extmail</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/04/23/hello-world/" class="article-date">
-  	<time datetime="2016-04-22T16:00:00.000Z" itemprop="datePublished">2016-04-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/23/hello-world/">First Of My Hexo Blog</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<p>以上是hexo第一篇默认内容，hexo出自台湾大学生tommy351之手,是由Node.js驱动的一款快速、简单且功能强大的博客框架。Node.js是一个可以快速构建网络服务及应用的平台 ，nvm是Node.js的版本控制工具。</p>
-<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>平台：Centos6.5 git1.8</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装nvm</span></span><br><span class="line">$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash</span><br><span class="line">或</span><br><span class="line">$ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash</span><br><span class="line">或</span><br><span class="line">$ git <span class="built_in">clone</span> https://github.com/creationix/nvm.git ~/.nvm &amp;&amp; <span class="built_in">cd</span> ~/.nvm &amp;&amp; git checkout `git describe --abbrev=0 --tags`</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export NVM_DIR="</span><span class="variable">$HOME</span>/.nvm<span class="string">""</span> &gt;&gt; ~./bashrc &amp;&amp; <span class="built_in">echo</span> <span class="string">"[ -s "</span><span class="variable">$NVM_DIR</span>/nvm.sh<span class="string">" ] &amp;&amp; . "</span><span class="variable">$NVM_DIR</span>/nvm.sh<span class="string">" # This loads nvm"</span> &gt;&gt; ~./bashrc</span><br><span class="line"><span class="comment"># 使用Node.js</span></span><br><span class="line">$ nvm install v5.10.1 &amp;&amp; nvm <span class="built_in">alias</span> default v5.10.1 &amp;&amp; nvm use 5.10.1</span><br></pre></td></tr></table></figure>
-<p>下面安装hexo及相关插件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo -g</span><br><span class="line">$ npm install hexo-generator-index --save</span><br><span class="line">$ npm install hexo-generator-archive --save</span><br><span class="line">$ npm install hexo-generator-category --save</span><br><span class="line">$ npm install hexo-generator-tag --save</span><br><span class="line">$ npm install hexo-server --save</span><br><span class="line">$ npm install hexo-deployer-git --save</span><br><span class="line">$ npm install hexo-deployer-heroku --save</span><br><span class="line">$ npm install hexo-deployer-rsync --save</span><br><span class="line">$ npm install hexo-deployer-openshift --save</span><br><span class="line">$ npm install hexo-renderer-marked@0.2 --save</span><br><span class="line">$ npm install hexo-renderer-stylus@0.2 --save</span><br><span class="line">$ npm install hexo-generator-feed@1 --save</span><br><span class="line">$ npm install hexo-generator-sitemap@1 --save</span><br></pre></td></tr></table></figure>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init Myblog <span class="comment">#初始化 </span></span><br><span class="line">$ .</span><br><span class="line">$ ├── _config.yml</span><br><span class="line">$ ├── db.json</span><br><span class="line">$ ├── node_modules</span><br><span class="line">$ ├── package.json</span><br><span class="line">$ ├── public</span><br><span class="line">$ ├── scaffolds</span><br><span class="line">$ ├── <span class="built_in">source</span></span><br><span class="line">$ └── themes</span><br><span class="line">$ hexo new [layout] &lt;title&gt;  <span class="comment">#创建新文章，默认layout是post</span></span><br></pre></td></tr></table></figure>
-<h3 id="文章摘要"><a href="#文章摘要" class="headerlink" title="文章摘要"></a>文章摘要</h3><p>在需要显示摘要的地方添加如下代码即可：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ 以上是摘要</span><br><span class="line">$ &lt;!--more--&gt;</span><br><span class="line">$ 以下是余下全文</span><br></pre></td></tr></table></figure>
-<h3 id="文章中插入图片"><a href="#文章中插入图片" class="headerlink" title="文章中插入图片"></a>文章中插入图片</h3><blockquote>
-<p><img src="链接地址" alt=""></p>
-</blockquote>
-<p>对于hexo，使用本地路径：在/source目录下新建一个img文件夹，将图片放入该文件夹下，插入图片时链接即为/img/图片名称。</p>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br><span class="line">$ [root@myou _posts]<span class="comment"># tail -6 ../../_config.yml </span></span><br><span class="line">$ <span class="comment"># Deployment</span></span><br><span class="line">$ <span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line">$ deploy:</span><br><span class="line">$   <span class="built_in">type</span>: git</span><br><span class="line">$   repo: https://github.com/strongit/strongit.github.io</span><br><span class="line">$   branch: master</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>
