@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://strongit.github.io/"/>
-  <updated>2016-07-05T07:09:58.400Z</updated>
+  <updated>2016-07-08T10:54:03.575Z</updated>
   <id>http://strongit.github.io/</id>
   
   <author>
@@ -14,6 +14,364 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Node.js原子性操作MongoDB</title>
+    <link href="http://strongit.github.io/2016/06/21/mongodb-howto-nodejs-atom-op-mongodb/"/>
+    <id>http://strongit.github.io/2016/06/21/mongodb-howto-nodejs-atom-op-mongodb/</id>
+    <published>2016-06-20T16:00:00.000Z</published>
+    <updated>2016-07-08T10:54:03.575Z</updated>
+    
+    <content type="html">&lt;p&gt;假设基础数据为:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+{
+    &quot;name&quot; : &quot;cb&quot;,
+    &quot;data&quot; : 0,
+}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;有时候为了充分利用多核,会同时开启多个node进程,但是若部分代码若涉及到操作mongodb就会有下面现象.&lt;br&gt;“理想情况下”,多个进程执行完后得数据为:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+{
+    &quot;name&quot; : &quot;cb&quot;,
+    &quot;data&quot; : 6000,
+}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;其实不然 !&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我们看看获得结果是怎么样的.&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+co(function* () {
+    for (var i=0; i&lt; 3000; i++) {
+        var getTest = yield mongoCtest.findOne({&quot;name&quot;:&quot;cb&quot;}, {&quot;fields&quot;:{&quot;_id&quot;:0}});
+        getTest.data =  getTest.data+1;
+        console.log(getTest);
+        yield mongoCtest.update({&quot;name&quot;:&quot;good&quot;}, {&quot;$set&quot;:getTest});
+    }
+})();
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;上面的程序同时开两个,多个进程同时操作一个数据.&lt;br&gt;可能结果会是:&lt;br&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/744e593bgw1enhm3w6525j20wo0n6459.jpg&quot; alt=&quot;多进程操作Mongo&quot;&gt;&lt;/p&gt;
+&lt;p&gt;我们知道Mongo是不支持事务的,如果你能容忍上面的弱一致性,那么没问题.但是如果你不能容忍，要么考虑MySql关系型数据库,要么自己解决事务问题.&lt;/p&gt;
+&lt;p&gt;下面我来说下基于Mongo怎么解决事务问题.&lt;br&gt;我们需要对每个数据加一个version来控制.直接上代码:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+co(function* () {
+    for (var i=0; i&lt; 3000; i++) {
+        while (1) {
+            var getTest = yield mongoCtest.findOne({&quot;name&quot;:&quot;cb&quot;}, {&quot;fields&quot;:{&quot;_id&quot;:0}});
+            getTest.data =  getTest.data+1;
+            var originalVer = getTest.ver;
+            getTest.ver = getTest.ver+1;
+            console.log(getTest);
+            var ret = yield mongoCtest.update({&quot;name&quot;:&quot;cb&quot;, &quot;ver&quot;:originalVer}, {&quot;$set&quot;:getTest});
+            if (ret)  break;
+        }
+    }
+})();
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;下面就是我们想要的结果:)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/744e593bgw1enhm5tgq6qj20xt0njqbo.jpg&quot; alt=&quot;原子性控制&quot;&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;假设基础数据为:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+{
+    &quot;name&quot; : &quot;cb&quot;,
+    &quot;data&quot; : 0,
+}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;有时候为了充分利用多核,会同时开启多个node进程,但是若部分代码若涉及到操作mongodb就会有下面现象.&lt;br&gt;“理想情况下”,多个进程执行完后得数据为:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+{
+    &quot;name&quot; : &quot;cb&quot;,
+    &quot;data&quot; : 6000,
+}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;其实不然 !&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="MongoDB" scheme="http://strongit.github.io/tags/MongoDB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MongoDB Map-Reduce 原理及提速</title>
+    <link href="http://strongit.github.io/2016/06/18/mongodb-mongodb-map-reduce-increase-speed/"/>
+    <id>http://strongit.github.io/2016/06/18/mongodb-mongodb-map-reduce-increase-speed/</id>
+    <published>2016-06-17T16:00:00.000Z</published>
+    <updated>2016-07-08T10:53:02.695Z</updated>
+    
+    <content type="html">&lt;p&gt;想要优化Map-reduce就要深入理解其原理.&lt;/p&gt;
+&lt;p&gt;Map-Reduce基本原理请见下图:&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/744e593bgw1eodjvvjkrij20r80jgdj7.jpg&quot; alt=&quot;Map-Reduce基本原理&quot;&gt;&lt;/p&gt;
+&lt;p&gt;整个数据处理流程可以参见官方上图,先对要进行处理的数据进行Query,然后针对Query的数据进行map,最后针对map的数据进行reduce.&lt;/p&gt;
+&lt;p&gt;简单了解之后,我们这里取一个例子熟悉下整个过程:&lt;/p&gt;
+&lt;p&gt;数据基本格式为:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;js&quot;&gt;
+/* 0 */
+{
+    &quot;code&quot; : &quot;A&quot;,
+    &quot;uid&quot; : &quot;id_1&quot;,
+    &quot;count&quot; : 1
+}
+
+/* 1 */
+{
+    &quot;code&quot; : &quot;A&quot;,
+    &quot;uid&quot; : &quot;id_1&quot;,
+    &quot;count&quot; : 1
+}
+
+/* 2 */
+{
+    &quot;code&quot; : &quot;B&quot;,
+    &quot;uid&quot; : &quot;id_1&quot;,
+    &quot;count&quot; : 1
+}
+
+/* 3 */
+{
+    &quot;code&quot; : &quot;B&quot;,
+    &quot;uid&quot; : &quot;id_2&quot;,
+    &quot;count&quot; : 2
+}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;目的:根据uid计算出count的和 且 这个合涉及到哪些code.&lt;/p&gt;
+&lt;p&gt;很快就可以写出Map和Reduce函数:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+var map = function() {
+    emit(this.uid, {&quot;code&quot;:this.code || &quot;&quot;, count:this.count || 1});
+};
+
+var reduce = function(key, values) {
+    var result = {code:{}, count:0};
+    values.forEach(function(val) {
+                result.code[val.code] = 1;
+                result.count += val.count;
+                });
+    return result;
+}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;结果为:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+/* 0 */
+{
+    &quot;_id&quot; : &quot;id_1&quot;,
+    &quot;value&quot; : {
+        &quot;code&quot; : {
+            &quot;A&quot; : 1,
+            &quot;B&quot; : 1
+        },
+        &quot;count&quot; : 3
+    }
+}
+
+/* 1 */
+{
+    &quot;_id&quot; : &quot;id_2&quot;,
+    &quot;value&quot; : {
+        &quot;code&quot; : &quot;B&quot;,
+        &quot;count&quot; : 2
+    }
+}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;这次我省去了query的过程,直接进行Map和Reduce,我们来拆解下过程:&lt;/p&gt;
+&lt;p&gt;首先,MongoDB会扫描整个数据表(这里省去Query)遍历所有documents,对于每个docuemnt都会根据key(uid)进行map存储.&lt;/p&gt;
+&lt;p&gt;其次,这个时候MongoDB会对记录的size进行检查( mongod checks every 100 records that the size of the map is not over 50KB, if so it runs reduce on ALL current keys. If size of map is still over 100KB, it dumps all current documents to disk in an “incremental” collection.)&lt;/p&gt;
+&lt;p&gt;最后根据map的数据进行reduce操作.&lt;/p&gt;
+&lt;p&gt;好,上面三点是大概的过程,对于Mapping过程,上面实例中会进行&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+{&quot;id_1&quot;, values:[{&quot;code&quot;:&quot;A&quot;, &quot;count&quot;:1}, {&quot;code&quot;:&quot;A&quot;, &quot;count&quot;:1}, {&quot;code&quot;:&quot;B&quot;, &quot;count&quot;:1}}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;这样的Emit操作.这点是需要注意的.然后以这样得方式传入到Reduce进行处理,所以Reduce必须对values进行forEach处理.&lt;/p&gt;
+&lt;p&gt;通过上面这个过程,还有一点要非常注意:如果有很多文档,而且这些文档的分布是非常随机的,当内存比较小时,MongoDB会采取把这些数据存在一个inc自增的文档中.&lt;/p&gt;
+&lt;p&gt;比方说:我有A, B, C三个key, 每个key有100个, 但是这些key都是随机分布的 比如A…B…A…B..C…A..B..C..当我要先对A进行Emit时需要把所有是A的key的document获取出来,那么这个过程当内存很小时 需要把大部分得document存储到磁盘上.然后内存和磁盘一直交换数据,至到把A全部找出为止(期间每在内存中操作的部分A会先Emit出去).&lt;/p&gt;
+&lt;p&gt;这种操作肯定很耗时, 如果我们对key进行索引且排好序,那么排好序的A就会大部分在内存中,减少了内存和磁盘的切换次数.&lt;/p&gt;
+&lt;p&gt;所以对大数据加排序是必须要有的.这个细节至少可以提高很多倍得处理速度.&lt;/p&gt;
+&lt;p&gt;基本原理先说到这,还有更多实践干货留着下次说.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;想要优化Map-reduce就要深入理解其原理.&lt;/p&gt;
+&lt;p&gt;Map-Reduce基本原理请见下图:&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="MongoDB" scheme="http://strongit.github.io/tags/MongoDB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MONGODB的BASIC INDEXES 和 COMPOUND INDEXES 研究</title>
+    <link href="http://strongit.github.io/2016/06/12/mongodb-mongodb-basic-indexes-compound-indexes/"/>
+    <id>http://strongit.github.io/2016/06/12/mongodb-mongodb-basic-indexes-compound-indexes/</id>
+    <published>2016-06-11T17:18:41.000Z</published>
+    <updated>2016-07-08T10:51:09.166Z</updated>
+    
+    <content type="html">&lt;p&gt;前几天看到一个关于 MongoDB 深入索引的PPT&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.slideshare.net/mongodb/mongodb-indexing-the-details&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;MongoDB Indexing: The Details&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;仔细的从头看到尾, 里面有个关于Compound Indexes的Range and Equality的讲解,在ppt第129页,重新回顾下这个例子.向一个collection中插入 9 条数据,像下面这样:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+&gt; db.good.find()
+{ &quot;_id&quot; : ObjectId(&quot;4e8d629d8ad8bdf2ed6c1990&quot;), &quot;x&quot; : 1, &quot;y&quot; : &quot;b&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62a38ad8bdf2ed6c1991&quot;), &quot;x&quot; : 3, &quot;y&quot; : &quot;d&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62ad8ad8bdf2ed6c1992&quot;), &quot;x&quot; : 4, &quot;y&quot; : &quot;g&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62b28ad8bdf2ed6c1993&quot;), &quot;x&quot; : 5, &quot;y&quot; : &quot;c&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62ba8ad8bdf2ed6c1994&quot;), &quot;x&quot; : 6, &quot;y&quot; : &quot;a&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62c18ad8bdf2ed6c1995&quot;), &quot;x&quot; : 7, &quot;y&quot; : &quot;e&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62ce8ad8bdf2ed6c1996&quot;), &quot;x&quot; : 8, &quot;y&quot; : &quot;c&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62d38ad8bdf2ed6c1997&quot;), &quot;x&quot; : 9, &quot;y&quot; : &quot;f&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d719a6cee6416a5a75a43&quot;), &quot;x&quot; : 5, &quot;y&quot; : &quot;d&quot; }
+&lt;/code&gt;
+&lt;/pre&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+然后给x 和 y进行联合索引
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+db.good.ensureIndex({x:1,y:1})
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;我们来进行这样的查找&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+&gt; db.good.find({x:{$gte:4}, y:’c’}).explain()
+{
+    &quot;cursor&quot; : &quot;BtreeCursor x_1_y_1&quot;,
+        &quot;nscanned&quot; : 7,
+        &quot;nscannedObjects&quot; : 2,
+        &quot;n&quot; : 2,
+        &quot;millis&quot; : 0,
+        &quot;nYields&quot; : 0,
+        &quot;nChunkSkips&quot; : 0,
+        &quot;isMultiKey&quot; : false,
+        &quot;indexOnly&quot; : false,
+        &quot;indexBounds&quot; : {
+            &quot;x&quot; : [
+                [
+                    4,
+                    1.7976931348623157e+308
+                ]
+            ],
+            &quot;y&quot; : [
+                [
+                    &quot;c&quot;,
+                    &quot;c&quot;
+                ]
+            ]
+        }
+}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;可以看出 nscanned 非常高! 而 n只有 2 .官网上有这样一句话:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If nscanned is much higher than nreturned, the database is scanning many objects to find the target objects. Consider creating an index to improve this.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这里nscanned可以认为是扫描的记录数.n为返回的记录数&lt;/p&gt;
+&lt;p&gt;让我们配合PPT看下 nscanned:7是怎么来的:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/large/744e593bgw1end6qzl43vj20fy09t0ta.jpg&quot; alt=&quot;BTree&quot;&gt;&lt;/p&gt;
+&lt;p&gt;这是MongoDB的B-tree索引树,因为x&amp;gt;=4 &amp;amp;&amp;amp; y=’c’,所以先选择左枝搜索,左枝搜索了4/g 和 5/c ,(5/c符合条件),然后搜索 右枝 搜索了 7/e, 6/a ,8/c, 9/f ,(8/c符合条件). 任何 符合的 x都要被check一下.&lt;/p&gt;
+&lt;p&gt;###延伸&lt;/p&gt;
+&lt;p&gt;看了PPT后到此结尾了, 真遇到这种情况,效率可不乐观,于是稍微思考了下, y 在 这颗树中只有两个节点含有,也就是说 既然是 ‘与’  那就只要先把 y 筛选出来 ,搜索次数就大大减半了 .&lt;/p&gt;
+&lt;p&gt;我们在 y 上再进行Basic Indexes 的建立.&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+db.good.ensureIndex({y:1})
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;这样如果搜索时会先 搜索 y  ,也就只有2次搜索了.看下实际情况:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+&gt; db.good.find({x:{$gte:4}, y:’c’}).explain()
+{
+    &quot;cursor&quot; : &quot;BtreeCursor y_1&quot;,
+        &quot;nscanned&quot; : 2,
+        &quot;nscannedObjects&quot; : 2,
+        &quot;n&quot; : 2,
+        &quot;millis&quot; : 0,
+        &quot;nYields&quot; : 0,
+        &quot;nChunkSkips&quot; : 0,
+        &quot;isMultiKey&quot; : false,
+        &quot;indexOnly&quot; : false,
+        &quot;indexBounds&quot; : {
+            &quot;y&quot; : [
+                [
+                    &quot;c&quot;,
+                    &quot;c&quot;
+                ]
+            ]
+        }
+}
+&lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;正如预料的一样. 直接走 基本索引了.&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前几天看到一个关于 MongoDB 深入索引的PPT&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.slideshare.net/mongodb/mongodb-indexing-the-details&quot;&gt;MongoDB Indexing: The Details&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;仔细的从头看到尾, 里面有个关于Compound Indexes的Range and Equality的讲解,在ppt第129页,重新回顾下这个例子.向一个collection中插入 9 条数据,像下面这样:&lt;/p&gt;
+&lt;pre&gt;
+&lt;code class=&quot;javascript&quot;&gt;
+&gt; db.good.find()
+{ &quot;_id&quot; : ObjectId(&quot;4e8d629d8ad8bdf2ed6c1990&quot;), &quot;x&quot; : 1, &quot;y&quot; : &quot;b&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62a38ad8bdf2ed6c1991&quot;), &quot;x&quot; : 3, &quot;y&quot; : &quot;d&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62ad8ad8bdf2ed6c1992&quot;), &quot;x&quot; : 4, &quot;y&quot; : &quot;g&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62b28ad8bdf2ed6c1993&quot;), &quot;x&quot; : 5, &quot;y&quot; : &quot;c&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62ba8ad8bdf2ed6c1994&quot;), &quot;x&quot; : 6, &quot;y&quot; : &quot;a&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62c18ad8bdf2ed6c1995&quot;), &quot;x&quot; : 7, &quot;y&quot; : &quot;e&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62ce8ad8bdf2ed6c1996&quot;), &quot;x&quot; : 8, &quot;y&quot; : &quot;c&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d62d38ad8bdf2ed6c1997&quot;), &quot;x&quot; : 9, &quot;y&quot; : &quot;f&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;4e8d719a6cee6416a5a75a43&quot;), &quot;x&quot; : 5, &quot;y&quot; : &quot;d&quot; }
+&lt;/code&gt;
+&lt;/pre&gt;
+    
+    </summary>
+    
+    
+      <category term="MongoDB" scheme="http://strongit.github.io/tags/MongoDB/"/>
+    
+  </entry>
   
   <entry>
     <title>SSL基本配置</title>

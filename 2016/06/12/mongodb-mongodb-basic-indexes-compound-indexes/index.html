@@ -4,24 +4,38 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>EMOS的安装与使用 | Strong It</title>
+  <title>MONGODB的BASIC INDEXES 和 COMPOUND INDEXES 研究 | Strong It</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="EMOS是一个基于CentOS，集成了ExtMail Server全部组件的小型Linux系统，10分钟即可完成安装及配置，成为完备的企业邮局系统。它的诞生将彻底改变邮件系统复杂的安装和配置局面，使只具备基本linux知识的用户就可轻松架设邮局。
-获取软件百度云盘地址：EMOS 访问密码：lcr4
-yum安装方式：1234567891011121314151617181920[root@emos">
+  <meta name="description" content="前几天看到一个关于 MongoDB 深入索引的PPT
+MongoDB Indexing: The Details
+仔细的从头看到尾, 里面有个关于Compound Indexes的Range and Equality的讲解,在ppt第129页,重新回顾下这个例子.向一个collection中插入 9 条数据,像下面这样:
+
+
+&amp;gt; db.good.find()
+{ &quot;_id&quot; : ObjectId(">
 <meta property="og:type" content="article">
-<meta property="og:title" content="EMOS的安装与使用">
-<meta property="og:url" content="http://strongit.github.io/2016/04/23/EMOS/index.html">
+<meta property="og:title" content="MONGODB的BASIC INDEXES 和 COMPOUND INDEXES 研究">
+<meta property="og:url" content="http://strongit.github.io/2016/06/12/mongodb-mongodb-basic-indexes-compound-indexes/index.html">
 <meta property="og:site_name" content="Strong It">
-<meta property="og:description" content="EMOS是一个基于CentOS，集成了ExtMail Server全部组件的小型Linux系统，10分钟即可完成安装及配置，成为完备的企业邮局系统。它的诞生将彻底改变邮件系统复杂的安装和配置局面，使只具备基本linux知识的用户就可轻松架设邮局。
-获取软件百度云盘地址：EMOS 访问密码：lcr4
-yum安装方式：1234567891011121314151617181920[root@emos">
-<meta property="og:updated_time" content="2016-04-28T17:37:13.000Z">
+<meta property="og:description" content="前几天看到一个关于 MongoDB 深入索引的PPT
+MongoDB Indexing: The Details
+仔细的从头看到尾, 里面有个关于Compound Indexes的Range and Equality的讲解,在ppt第129页,重新回顾下这个例子.向一个collection中插入 9 条数据,像下面这样:
+
+
+&amp;gt; db.good.find()
+{ &quot;_id&quot; : ObjectId(">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/744e593bgw1end6qzl43vj20fy09t0ta.jpg">
+<meta property="og:updated_time" content="2016-07-08T10:51:09.166Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="EMOS的安装与使用">
-<meta name="twitter:description" content="EMOS是一个基于CentOS，集成了ExtMail Server全部组件的小型Linux系统，10分钟即可完成安装及配置，成为完备的企业邮局系统。它的诞生将彻底改变邮件系统复杂的安装和配置局面，使只具备基本linux知识的用户就可轻松架设邮局。
-获取软件百度云盘地址：EMOS 访问密码：lcr4
-yum安装方式：1234567891011121314151617181920[root@emos">
+<meta name="twitter:title" content="MONGODB的BASIC INDEXES 和 COMPOUND INDEXES 研究">
+<meta name="twitter:description" content="前几天看到一个关于 MongoDB 深入索引的PPT
+MongoDB Indexing: The Details
+仔细的从头看到尾, 里面有个关于Compound Indexes的Range and Equality的讲解,在ppt第129页,重新回顾下这个例子.向一个collection中插入 9 条数据,像下面这样:
+
+
+&amp;gt; db.good.find()
+{ &quot;_id&quot; : ObjectId(">
+<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/744e593bgw1end6qzl43vj20fy09t0ta.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Strong It" type="application/atom+xml">
   
@@ -189,11 +203,11 @@ yum安装方式：1234567891011121314151617181920[root@emos">
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-EMOS" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-mongodb-mongodb-basic-indexes-compound-indexes" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/04/23/EMOS/" class="article-date">
-  	<time datetime="2016-04-22T16:00:00.000Z" itemprop="datePublished">2016-04-23</time>
+      <a href="/2016/06/12/mongodb-mongodb-basic-indexes-compound-indexes/" class="article-date">
+  	<time datetime="2016-06-11T17:18:41.000Z" itemprop="datePublished">2016-06-12</time>
 </a>
     </div>
   
@@ -206,7 +220,7 @@ yum安装方式：1234567891011121314151617181920[root@emos">
         
   
     <h1 class="article-title" itemprop="name">
-      EMOS的安装与使用
+      MONGODB的BASIC INDEXES 和 COMPOUND INDEXES 研究
     </h1>
   
 
@@ -215,7 +229,7 @@ yum安装方式：1234567891011121314151617181920[root@emos">
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Extmail/">Extmail</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li></ul>
 	</div>
 
         
@@ -226,13 +240,108 @@ yum安装方式：1234567891011121314151617181920[root@emos">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>EMOS是一个基于CentOS，集成了ExtMail Server全部组件的小型Linux系统，10分钟即可完成安装及配置，成为完备的企业邮局系统。它的诞生将彻底改变邮件系统复杂的安装和配置局面，使只具备基本linux知识的用户就可轻松架设邮局。</p>
-<h2 id="获取软件"><a href="#获取软件" class="headerlink" title="获取软件"></a>获取软件</h2><h3 id="百度云盘地址："><a href="#百度云盘地址：" class="headerlink" title="百度云盘地址："></a>百度云盘地址：</h3><p><a href="http://pan.baidu.com/s/1nvaSrUh" target="_blank" rel="external">EMOS</a> 访问密码：lcr4</p>
-<h3 id="yum安装方式："><a href="#yum安装方式：" class="headerlink" title="yum安装方式："></a>yum安装方式：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@emos /]<span class="comment"># vi /etc/yum.repos.d/EMOS-Base.repo</span></span><br><span class="line"><span class="comment"># EMOS-Base.repo</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Created by ExtMail Dev Team: http://www.extmail.org/</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># $Id$</span></span><br><span class="line"></span><br><span class="line">[EMOS-base]</span><br><span class="line">name=EMOS-Base</span><br><span class="line">baseurl=http://mirror.extmail.org/yum/emos/1.5/os/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=0</span><br><span class="line">protect=0</span><br><span class="line"></span><br><span class="line">[EMOS-update]</span><br><span class="line">name=EMOS-Updates</span><br><span class="line">baseurl=http://mirror.extmail.org/yum/emos/1.5/updates/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=0</span><br><span class="line">protect=0</span><br></pre></td></tr></table></figure>
-<p>保存后，然后尝试执行一下yum list 等操作，看看是否已经成功；</p>
-<h2 id="使用技巧："><a href="#使用技巧：" class="headerlink" title="使用技巧："></a>使用技巧：</h2><p>安装过程很简单，以下是使用过后觉得可以优化的地方：</p>
-<h3 id="webmail中设置显示默认域名，不显示ip"><a href="#webmail中设置显示默认域名，不显示ip" class="headerlink" title="webmail中设置显示默认域名，不显示ip"></a>webmail中设置显示默认域名，不显示ip</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@emos /]<span class="comment"># vi /var/www/extsuite/extmail/html/default/index.html</span></span><br><span class="line">156                 &lt;TD&gt;&lt;%password%&gt;&lt;/TD&gt;</span><br><span class="line">157                 &lt;TD&gt;&lt;INPUT TYPE=<span class="string">"password"</span> class=<span class="string">"input_n"</span> NAME=<span class="string">"password"</span>&gt;&lt;/TD&gt;</span><br><span class="line">158         &lt;/TR&gt;</span><br><span class="line">159         &lt;TR&gt;</span><br><span class="line">160                 &lt;TD&gt;&lt;%domain%&gt;&lt;/TD&gt;</span><br><span class="line">161                 &lt;TD&gt;&lt;INPUT TYPE=<span class="string">"text"</span> class=<span class="string">"input_n"</span> NAME=<span class="string">"domain"</span> value=<span class="string">"域名"</span>&gt;&lt;/TD&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="官方wiki"><a href="#官方wiki" class="headerlink" title="官方wiki"></a>官方wiki</h3><p><a href="http://wiki.extmail.org/doku.php" target="_blank" rel="external">Main Page</a><br><a href="http://www.extmail.org/forum/forum-15-1.html" target="_blank" rel="external">forum</a></p>
+        <p>前几天看到一个关于 MongoDB 深入索引的PPT</p>
+<p><a href="http://www.slideshare.net/mongodb/mongodb-indexing-the-details" target="_blank" rel="external">MongoDB Indexing: The Details</a></p>
+<p>仔细的从头看到尾, 里面有个关于Compound Indexes的Range and Equality的讲解,在ppt第129页,重新回顾下这个例子.向一个collection中插入 9 条数据,像下面这样:</p>
+<pre>
+<code class="javascript">
+> db.good.find()
+{ "_id" : ObjectId("4e8d629d8ad8bdf2ed6c1990"), "x" : 1, "y" : "b" }
+{ "_id" : ObjectId("4e8d62a38ad8bdf2ed6c1991"), "x" : 3, "y" : "d" }
+{ "_id" : ObjectId("4e8d62ad8ad8bdf2ed6c1992"), "x" : 4, "y" : "g" }
+{ "_id" : ObjectId("4e8d62b28ad8bdf2ed6c1993"), "x" : 5, "y" : "c" }
+{ "_id" : ObjectId("4e8d62ba8ad8bdf2ed6c1994"), "x" : 6, "y" : "a" }
+{ "_id" : ObjectId("4e8d62c18ad8bdf2ed6c1995"), "x" : 7, "y" : "e" }
+{ "_id" : ObjectId("4e8d62ce8ad8bdf2ed6c1996"), "x" : 8, "y" : "c" }
+{ "_id" : ObjectId("4e8d62d38ad8bdf2ed6c1997"), "x" : 9, "y" : "f" }
+{ "_id" : ObjectId("4e8d719a6cee6416a5a75a43"), "x" : 5, "y" : "d" }
+</code>
+</pre>
+<a id="more"></a>
+
+然后给x 和 y进行联合索引
+<pre>
+<code class="javascript">
+db.good.ensureIndex({x:1,y:1})
+</code>
+</pre>
+
+<p>我们来进行这样的查找</p>
+<pre>
+<code class="javascript">
+> db.good.find({x:{$gte:4}, y:’c’}).explain()
+{
+    "cursor" : "BtreeCursor x_1_y_1",
+        "nscanned" : 7,
+        "nscannedObjects" : 2,
+        "n" : 2,
+        "millis" : 0,
+        "nYields" : 0,
+        "nChunkSkips" : 0,
+        "isMultiKey" : false,
+        "indexOnly" : false,
+        "indexBounds" : {
+            "x" : [
+                [
+                    4,
+                    1.7976931348623157e+308
+                ]
+            ],
+            "y" : [
+                [
+                    "c",
+                    "c"
+                ]
+            ]
+        }
+}
+</code>
+</pre>
+
+<p>可以看出 nscanned 非常高! 而 n只有 2 .官网上有这样一句话:</p>
+<blockquote>
+<p>If nscanned is much higher than nreturned, the database is scanning many objects to find the target objects. Consider creating an index to improve this.</p>
+</blockquote>
+<p>这里nscanned可以认为是扫描的记录数.n为返回的记录数</p>
+<p>让我们配合PPT看下 nscanned:7是怎么来的:</p>
+<p><img src="http://ww3.sinaimg.cn/large/744e593bgw1end6qzl43vj20fy09t0ta.jpg" alt="BTree"></p>
+<p>这是MongoDB的B-tree索引树,因为x&gt;=4 &amp;&amp; y=’c’,所以先选择左枝搜索,左枝搜索了4/g 和 5/c ,(5/c符合条件),然后搜索 右枝 搜索了 7/e, 6/a ,8/c, 9/f ,(8/c符合条件). 任何 符合的 x都要被check一下.</p>
+<p>###延伸</p>
+<p>看了PPT后到此结尾了, 真遇到这种情况,效率可不乐观,于是稍微思考了下, y 在 这颗树中只有两个节点含有,也就是说 既然是 ‘与’  那就只要先把 y 筛选出来 ,搜索次数就大大减半了 .</p>
+<p>我们在 y 上再进行Basic Indexes 的建立.</p>
+<pre>
+<code class="javascript">
+db.good.ensureIndex({y:1})
+</code>
+</pre>
+
+<p>这样如果搜索时会先 搜索 y  ,也就只有2次搜索了.看下实际情况:</p>
+<pre>
+<code class="javascript">
+> db.good.find({x:{$gte:4}, y:’c’}).explain()
+{
+    "cursor" : "BtreeCursor y_1",
+        "nscanned" : 2,
+        "nscannedObjects" : 2,
+        "n" : 2,
+        "millis" : 0,
+        "nYields" : 0,
+        "nChunkSkips" : 0,
+        "isMultiKey" : false,
+        "indexOnly" : false,
+        "indexBounds" : {
+            "y" : [
+                [
+                    "c",
+                    "c"
+                ]
+            ]
+        }
+}
+</code>
+</pre>
+
+<p>正如预料的一样. 直接走 基本索引了.</p>
 
       
     </div>
@@ -242,18 +351,18 @@ yum安装方式：1234567891011121314151617181920[root@emos">
     
 <nav id="article-nav">
   
-    <a href="/2016/04/28/rancher-03-Installing-Rancher-Single-Node/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/06/18/mongodb-mongodb-map-reduce-increase-speed/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          单节点服务器安装
+          MongoDB Map-Reduce 原理及提速
         
       </div>
     </a>
   
   
-    <a href="/2016/04/23/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">First Of My Hexo Blog</div>
+    <a href="/2016/06/10/rancher-03-Installing-Rancher-Basic-Ssl-Config/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">SSL基本配置</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -288,7 +397,7 @@ yum安装方式：1234567891011121314151617181920[root@emos">
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="EMOS" data-title="EMOS的安装与使用" data-url="http://strongit.github.io/2016/04/23/EMOS/"></div>
+	<div class="ds-thread" data-thread-key="mongodb-mongodb-basic-indexes-compound-indexes" data-title="MONGODB的BASIC INDEXES 和 COMPOUND INDEXES 研究" data-url="http://strongit.github.io/2016/06/12/mongodb-mongodb-basic-indexes-compound-indexes/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
