@@ -20,7 +20,7 @@ MySQL 服务，并且设置 max_connections &amp;gt;">
 任何支持 Docker 1.10.3 的 Linux 发行版。而 RancherOS，Ubuntu，RHEL/CentOS 7 经过了更多测试
 1GB 内存
 MySQL 服务，并且设置 max_connections &amp;gt;">
-<meta property="og:updated_time" content="2016-07-05T07:08:59.772Z">
+<meta property="og:updated_time" content="2016-07-08T10:58:55.614Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单节点服务器安装">
 <meta name="twitter:description" content="Rancher 使用基于 Docker 容器的部署方式。仅需简单的启动两个容器即可运行。一个容器用于管理 Rancher 服务，其他容器使用代理的方式管理主机或节点。
@@ -241,7 +241,7 @@ MySQL 服务，并且设置 max_connections &amp;gt;">
 <h4 id="启动-Rancher-服务器"><a href="#启动-Rancher-服务器" class="headerlink" title="启动 Rancher 服务器"></a>启动 Rancher 服务器</h4><p>在安装了 Docker 的服务器上可以很简单的使用命令启动 Rancher 服务</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run <span class="_">-d</span> --restart=always -p 8080:8080 rancher/server</span><br></pre></td></tr></table></figure>
 <h6 id="RANCHER-UI"><a href="#RANCHER-UI" class="headerlink" title="RANCHER UI"></a>RANCHER UI</h6><p>Rancher 的 UI 和 API 将开放 8080 端口。Docker 镜像下载后，还需要 1-2 分钟才可以成功启动并显示页面。</p>
-<p>访问以下地址：<code>http://&lt;SERVER_IP&gt;:8080</code>，这里<code>&lt;SERVER_IP&gt;</code>是指运行 Rancher 服务并可用于访问的IP地址。</p>
+<p>访问以下地址：<code>http://&lt;SERVER_IP&gt;:8080</code>，这里<code>&lt;SERVER_IP&gt;</code>是指运行 Rancher 服务并可用于访问的IP地址。<br><a id="more"></a></p>
 <p>一旦 UI 处于启动和运行状态，就可以开始 <a href="!--￼9--&gt;/rancher/installing-rancher/add-host/">添加主机</a> 。主机添加到 Rancher 后，您可以开始添加 <a href="">服务</a> 或 使用 <a href="">Rancher catalog</a> 启动模板。</p>
 <h4 id="开启活动目录或-OpenLDAP-支持-TLS"><a href="#开启活动目录或-OpenLDAP-支持-TLS" class="headerlink" title="开启活动目录或 OpenLDAP 支持(TLS)"></a>开启活动目录或 OpenLDAP 支持(TLS)</h4><p>为了开启 Rancher 活动目录或 OpenLDAP 支持(TLS)，Rancher Server 容器在启动时需要加载证书。您需要在运行 Rancher Server 的 Linux 主机上保存证书。</p>
 <p>启动 Rancher 服务并使用绑定挂载卷的方式加载证书，证书在容器中 <strong>必须</strong> 使用<code>ca.crt</code>命名。</p>

@@ -439,67 +439,7 @@
 <p><strong>注意：</strong></p>
 <p>在我们的示例中，我们假设代理运行在单独的容器中。如果您的代理计划由主机提供服务，需要将 Rancher 容器的 <code>8080</code> 端口映射至本地主机，可以向 <code>docker run</code> 命令添加参数 <code>-p 127.0.0.1:8080:8080</code> 实现。</p>
 </blockquote>
-<p>如果您想使用现有的 Rancher 实例，您可以基于现有的 Rancher 实例创建一个新的 Rancher 实例。</p>
-<ul>
-<li>若 Rancher 实例的 MySQL 数据库运行在容器内，在启动新的 Rancher 实例时，请参照 <a href="">升级说明</a> 创建数据容器并且在启动时添加 <code>--volumes-from=&lt;data_container&gt;</code> 。</li>
-<li>若 Rancher 实例使用了 <a href="">绑定挂载数据库</a> 的方式，请参照 <a href="">绑定挂载实例升级说明</a>。</li>
-<li>若 Rancher 实例使用外部数据库，则直接停止并删除现有的 Rancher 实例容器，并参照 <a href="">外部数据库连接说明</a> 启动新的容器。</li>
-</ul>
-<blockquote>
-<p><strong>注意：</strong></p>
-<p>在新的 Rancher 实例容器运行后，请确认已经 <strong>删除</strong> 了旧的 Rancher 实例容器，否则，在您的主机重启后，因为我们在 <code>docker run</code> 命令时加入了 <code>--restart=always</code> 参数，会导致旧容器启动。</p>
-</blockquote>
-<h3 id="NGINX-配置示例"><a href="#NGINX-配置示例" class="headerlink" title="NGINX 配置示例"></a>NGINX 配置示例</h3><p>这里的配置是 NGINX 运行的最低配置，您应该定制配置来满足您的需求。</p>
-<h4 id="节点设置"><a href="#节点设置" class="headerlink" title="节点设置"></a>节点设置</h4><ul>
-<li><code>rancher-server</code> 是您的 Rancher 服务器容器名。您必须在启动 Rancher 服务器容器的时候加入 <code>--name=rancher-server</code> 选项。并且在启动 NGINX 容器的时候加入 <code>--link=rancher-server</code> 选项才能使这些配置正常工作。</li>
-<li><code>&lt;server&gt;</code> 可以任意命名，但是必须保证 http 和 https 配置中的名称相同。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">upstream rancher &#123;</span><br><span class="line">    server rancher-server:8080;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name &lt;server&gt;;</span><br><span class="line">    ssl_certificate &lt;cert_file&gt;;</span><br><span class="line">    ssl_certificate_key &lt;key_file&gt;;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Forwarded-Port $server_port;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_pass http://rancher;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">        # This allows the ability for the execute shell window to remain open for up to 15 minutes. Without this parameter, the default is 1 minute and will automatically close.</span><br><span class="line">        proxy_read_timeout 900s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name &lt;server&gt;;</span><br><span class="line">    return 301 https://$server_name$request_uri;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="APACHE-配置示例"><a href="#APACHE-配置示例" class="headerlink" title="APACHE 配置示例"></a>APACHE 配置示例</h1><p>这是一个 Apache 的配置。</p>
-<h4 id="节点设置-1"><a href="#节点设置-1" class="headerlink" title="节点设置"></a>节点设置</h4><ul>
-<li><code>&lt;server_name&gt;</code> 是您 Rancher 服务器容器的名字，所以在启动 Apache 容器时需要加入 <code>--link=&lt;server_name&gt;</code> 才能使配置正常工作。</li>
-<li>在代理配置中，您需要替换 <code>rancher</code> 为您的信息。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">  ServerName &lt;server_name&gt;</span><br><span class="line">  Redirect / https://&lt;server_name&gt;/</span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost *:443&gt;</span><br><span class="line">  ServerName &lt;server_name&gt;</span><br><span class="line"></span><br><span class="line">  SSLEngine on</span><br><span class="line">  SSLCertificateFile &lt;/path/to/ssl/cert_file&gt;</span><br><span class="line">  SSLCertificateKeyFile &lt;/path/to/ssl/key_file&gt;</span><br><span class="line"></span><br><span class="line">  ProxyRequests Off</span><br><span class="line">  ProxyPreserveHost On</span><br><span class="line"></span><br><span class="line">  RewriteEngine On</span><br><span class="line">  RewriteCond %&#123;HTTP:Connection&#125; Upgrade [NC]</span><br><span class="line">  RewriteCond %&#123;HTTP:Upgrade&#125; websocket [NC]</span><br><span class="line">  RewriteRule /(.*) ws://rancher:8080/$1 [P,L]</span><br><span class="line"></span><br><span class="line">  RequestHeader set X-Forwarded-Proto &quot;https&quot;</span><br><span class="line">  RequestHeader set X-Forwarded-Port &quot;443&quot;</span><br><span class="line"></span><br><span class="line">  &lt;Location /&gt;</span><br><span class="line">    ProxyPass &quot;http://rancher:8080/&quot;</span><br><span class="line">    ProxyPassReverse &quot;http://rancher:8080/&quot;</span><br><span class="line">  &lt;/Location&gt;</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="更新主机注册"><a href="#更新主机注册" class="headerlink" title="更新主机注册"></a>更新主机注册</h2><p>在 Rancher 配置完成后，用户界面将使用 <code>https://&lt;your domain&gt;/</code> 访问。在 <a href="">添加主机</a> 之前，您需要正确配置 SSL 方式的 <a href="">主机注册</a> 地址。</p>
-<h2 id="在-AWS-ELB-后使用-SSL-运行-Rancher"><a href="#在-AWS-ELB-后使用-SSL-运行-Rancher" class="headerlink" title="在 AWS ELB 后使用 SSL 运行 Rancher"></a>在 AWS ELB 后使用 SSL 运行 Rancher</h2><p>默认情况下，ELB 不支持在 HTTP/HTTPS 模式下启用 websockets 。由于 Rancher 使用了 websockets ，则 ELB 必须修改配置以便 Rancher 的 websockets 可以正常工作。</p>
-<h4 id="Rancher-的-ELB-配置需求"><a href="#Rancher-的-ELB-配置需求" class="headerlink" title="Rancher 的 ELB 配置需求"></a>Rancher 的 ELB 配置需求</h4><ul>
-<li>启用 <a href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/enable-proxy-protocol.html" target="_blank" rel="external">代理协议</a> 模式</li>
-<li>配置 TLS/SSL 方式的前端以及 TCP 方式的后端</li>
-</ul>
-<h2 id="使用自签名证书（测试）"><a href="#使用自签名证书（测试）" class="headerlink" title="使用自签名证书（测试）"></a>使用自签名证书（测试）</h2><h4 id="免责声明"><a href="#免责声明" class="headerlink" title="免责声明"></a>免责声明</h4><p>这个配置可以工作在单节点 Rancher 服务器（非HA安装）模式的核心服务上，没有人验证是否支持 <a href="">Rancher 目录</a> 是否被支持。</p>
-<p>Rancher Compose 命令行默认需要将 CA 证书存储在操作系统，请参照 <a href="https://golang.org/src/crypto/x509/" target="_blank" rel="external">Golang</a>。</p>
-<h4 id="服务器必备条件"><a href="#服务器必备条件" class="headerlink" title="服务器必备条件"></a>服务器必备条件</h4><ul>
-<li>CA 证书 PEM 格式的文件</li>
-<li>已经签署证书的 Rancher 服务器</li>
-<li>NGINX 和 Apache 配置证书卸载，并反向代理到 Rancher 服务器</li>
-</ul>
-<h4 id="Rancher-服务器"><a href="#Rancher-服务器" class="headerlink" title="Rancher 服务器"></a>Rancher 服务器</h4><ol>
-<li><p>使用修改后的 Docker 命令启动 Rancher 服务器容器。证书 <strong>必须</strong> 在容器中被命名为 <code>ca.crt</code>。</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run -d --restart=always -p 8080:8080 -v /some/dir/cert.crt:/ca.crt rancher/server</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>注意：</strong></p>
-<p>如果你正在运行 NGINX 或 Apache 容器，您可以直接访问这些实例，不需要通过 Rancher 服务器的 8080 端口访问用户界面。<br> 这条命令将会配置 Rancher 服务器的证书链，所以 Rancher 的服务，如机器配置，目录和 compose 均可以和 Rancher 服务器通讯。</p>
-</blockquote>
-</li>
-<li><p>如果您正在使用一个 NGINX 或 Apache 容器卸载证书，您需要在启动容器的命令增加 <code>--link=</code> 选项。</p>
-</li>
-<li>通过 <code>https</code> 访问 Rancher 用户界面，即 <code>https://rancher.server.domain</code> 。</li>
-<li>更新 <a href="">主机注册</a> 为 SSL 方式。<blockquote>
-<p><strong>注意：</strong></p>
-<p>除非您的机器信任了用于签署 Rancher 服务器的 CA 证书，否则当你访问页面时，浏览器会给出一个不可信网站的警告信息。</p>
-</blockquote>
-</li>
-</ol>
-<h4 id="添加主机"><a href="#添加主机" class="headerlink" title="添加主机"></a>添加主机</h4><ol>
-<li>如果您想添加主机到 Rancher ，您必须在主机上以 pem 格式将 CA 证书保存到 <code>/var/lib/rancher/etc/ssl</code> 目录并命名为 <code>ca.crt</code> 。</li>
-<li>添加 <a href="">自定义主机</a> ，也就是从用户界面粘贴命令。命令已经加入了 <code>-v /var/lib/rancher:/var/lib/rancher</code> 选项，所以文件会被自动复制到您的主机上。</li>
-</ol>
-<hr>
-<blockquote>
-<p>From： <a href="http://docs.rancher.com/rancher/latest/en/installing-rancher/installing-server/basic-ssl-config/" target="_blank" rel="external">http://docs.rancher.com/rancher/latest/en/installing-rancher/installing-server/basic-ssl-config/</a></p>
-</blockquote>
-
+<p>如果您想使用现有的 Rancher 实例，您可以基于现有的 Rancher 实例创建一个新的 Rancher 实例。<br>
       
     </div>
     
@@ -512,6 +452,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/10/rancher-03-Installing-Rancher-Basic-Ssl-Config/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -578,59 +522,7 @@
 <h4 id="建议使用更大的部署"><a href="#建议使用更大的部署" class="headerlink" title="建议使用更大的部署"></a>建议使用更大的部署</h4><ul>
 <li>每个 Rancher Server 节点应该有 4GB 或 8GB 可用内存，意味着至少需要 8GB 或 16GB 的物理内存</li>
 <li>MySQL 数据库应该使用高速的磁盘</li>
-<li>对于真正的高可用，建议使用复制的 MySQL 并做适当的备份。由于存在事物锁，可以选择 Galera 或强制写入单节点的方式。</li>
-</ul>
-<h4 id="配置高可用-HA-的准备"><a href="#配置高可用-HA-的准备" class="headerlink" title="配置高可用(HA)的准备"></a>配置高可用(HA)的准备</h4><ol>
-<li>根据 <a href="">使用外部数据库启动单节点</a> 说明部署一个至少拥有 1GB 内存的 MySQL 数据库，但是不要使用其中启动 Rancher Server 的相关指令。因为默认情况下， 用户只能从本地访问数据库，你需要授权所有 Rancher Server 节点的网络。</li>
-<li>配置一个外部负载均衡器并将端口 80 和 443 的流量指向运行 Rancher Server 的节点池。</li>
-<li><p>使用这篇文档准备所有节点。这些节点都应该满足单节点部署 Rancher Server 的<a href="">需求</a>。（可选）您可以提前拉取 <code>rancher/server</code> 镜像到这些节点上。</p>
-<p> 目前，我们的高可用集群支持 3 种配置。<em> 1 节点：没有高可用 </em> 3 节点：任何一台主机可以宕机 * 5 节点：任何两台主机可以宕机</p>
-<blockquote>
-<p><strong>注意：</strong></p>
-<p>这些节点可以分布在同一个地区并使用稳定的高速链路连接的多个数据中心，不建议分布在过大的区域。如果你选择分布节点在同一个区域，Zookeeper 可以保证集群的高可用。如果你的节点分布在不同的数据中心，那么你只能保留问题最少的那个区域。</p>
-</blockquote>
-</li>
-<li><p>在其中一个节点上，启动一个 Rancher Server 用于生成配置脚本。下面这个脚本用于生成 Rancher Server 同时连接到外部数据库并初始化数据。它将被引导高可用部署过程。最终，Rancher Server 容器将使用此步骤替换为支持高可用的 Rancher Server 容器。</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run -d -p 8080:8080 \</span><br><span class="line">-e CATTLE_DB_CATTLE_MYSQL_HOST=&lt;hostname or IP of MySQL instance&gt; \</span><br><span class="line">-e CATTLE_DB_CATTLE_MYSQL_PORT=&lt;port&gt; \</span><br><span class="line">-e CATTLE_DB_CATTLE_MYSQL_NAME=&lt;Name of Database&gt; \</span><br><span class="line">-e CATTLE_DB_CATTLE_USERNAME=&lt;Username&gt; \</span><br><span class="line">-e CATTLE_DB_CATTLE_PASSWORD=&lt;Password&gt; \</span><br><span class="line">-v /var/run/docker.sock:/var/run/docker.sock \</span><br><span class="line">rancher/server:v1.0.1</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>注意：</strong></p>
-<p>请耐心等待，这个初始化步骤可能要15分钟才能完成</p>
-</blockquote>
-</li>
-<li><p>（可选）预先抓取 <code>rancher/server</code> 镜像到 Rancher 节点。这里抓取的镜像可用于配置脚本生成 Rancher Server 。</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># The version would be whatever was used in Step 4</span><br><span class="line">$ sudo docker pull rancher/server:v1.0.1</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h4 id="生成配置脚本"><a href="#生成配置脚本" class="headerlink" title="生成配置脚本"></a>生成配置脚本</h4><ol>
-<li>访问 Rancher Server 地址 <code>http://&lt;server_IP&gt;:8080</code> 生成脚本。在 <strong>Admin</strong> -&gt; <strong>HA</strong> 确认 Rancher Server 已经成功连接到外部数据库。如果没有正确配置，请重复上一节中的步骤 1 和 4 。</li>
-<li>选择集群大小，应该为您的 Rancher Server 节点数量，参照上一节中步骤 3 。</li>
-<li>在 <strong>Host Registration URL</strong> 中填写外部负载均衡器的 IPv4 地址或主机名。</li>
-<li>选择您想使用的证书类型。Rancher Server 可以为您生成一个自签名证书或者使用自己的有效证书。</li>
-<li>点击 <strong>Generate Config Script</strong> 。</li>
-<li>下载脚本并保存到本地。</li>
-<li>保存脚本后，停止用于生成脚本的 Rancher Server 容器。</li>
-</ol>
-<h4 id="启动高可用的-Rancher"><a href="#启动高可用的-Rancher" class="headerlink" title="启动高可用的 Rancher"></a>启动高可用的 Rancher</h4><ol>
-<li><p>为了使所有节点支持高可用，你需要在所有节点上使用配置脚本启动 Rancher Server 。脚本将启动一个 Rancher Server 容器并连接到之前创建的外部数据库。</p>
-<blockquote>
-<p><strong>注意：</strong></p>
-<p>请确保您已经停止用于生成脚本 <code>rancher-ha.sh</code> 的 Rancher Server 容器后再运行配置脚本。否则，在你尝试在同一个节点运行配置脚本时，将会有一个端口冲突导致高可用节点无法启动。</p>
-</blockquote>
-</li>
-<li><p>如果你之前生成配置脚本时提供了 <strong>Host Registration URL</strong> ，请导航到外部负载均衡器的 IP 或主机名。请注意，Rancher Server 的用户界面可能需要几分钟才可以使用。如果你的用户界面仍不可用，请参照 <a href="">查看并管理栈</a> 。</p>
-</li>
-<li>一旦用户界面可用，您将可以添加主机到 Rancher 高可用集群。在 <strong>Admin</strong> -&gt; <strong>HA</strong> 标签可以查看高可用节点的数量。添加主机前，您需要保存证书 <code>/var/lib/rancher/etc/ssl/ca.crt</code> 并赋予 <code>400</code> 权限到您要添加的主机上。注册命令可以自动创建使用并管理证书。</li>
-<li>在您向环境中添加主机后，高可用设置已经完成，您可以开始通过用户界面 <a href="">添加服务</a> ，从 Catalog <a href="">启动模板</a> 或使用 <a href="">rancher-compose</a> 启动服务。<blockquote>
-<p><strong>注意：</strong></p>
-<p>如果您正在使用 AWS ，你需要为添加到 Rancher 的主机配置 IP 。如果你想添加 <a href="">自定义主机</a> ，你需要在配置页面中填写公网 IP ，启动 Rancher agent 的命令会相应改变。已经通过页面添加的主机，必须 <a href="">ssh</a> 登陆到机器重启 Rancher agent 使 IP 生效。</p>
-</blockquote>
-</li>
-</ol>
-<hr>
-<blockquote>
-<p>From： <a href="http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/" target="_blank" rel="external">http://docs.rancher.com/rancher/installing-rancher/installing-server/multi-nodes/</a></p>
-</blockquote>
-
+<li>对于真正的高可用，建议使用复制的 MySQL 并做适当的备份。由于存在事物锁，可以选择 Galera 或强制写入单节点的方式。
       
     </div>
     
@@ -643,6 +535,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -686,7 +582,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Zabbix安装教程请移步 <a href="http://strongit.blog.51cto.com/10020534/1709616" target="_blank" rel="external">Zabbix Install</a><br>zabbix邮件报警配置步骤说明：</p>
+        <p>Zabbix安装教程请移步 <a href="http://strongit.blog.51cto.com/10020534/1709616">Zabbix Install</a><br>zabbix邮件报警配置步骤说明：</p>
 <blockquote>
 <p>1、准备一个发送邮件的脚本</p>
 <p>2、修改zabbix配置文件中指定的脚本路径</p>
@@ -696,22 +592,7 @@
 <p>6、添加多个用户，同时给多个人发邮件</p>
 <p>7、邮件接收测试</p>
 </blockquote>
-<h3 id="1、发送邮件的脚本"><a href="#1、发送邮件的脚本" class="headerlink" title="1、发送邮件的脚本"></a>1、发送邮件的脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># author:Strong It</span></span><br><span class="line"><span class="comment"># send zabbix message by email,usage: ./zabbix_email.py 收件人 标题 邮件内容</span></span><br><span class="line"></span><br><span class="line">import smtplib</span><br><span class="line">import sys</span><br><span class="line">import time</span><br><span class="line">from email.MIMEText import MIMEText</span><br><span class="line">from email.Header import Header</span><br><span class="line">from email.utils import parseaddr, formataddr</span><br><span class="line">from email import encoders</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf8'</span>)</span><br><span class="line">current_time=time.strftime(<span class="string">'%Y-%m-%d  %H:%M'</span>,time.localtime(time.time()))</span><br><span class="line">  </span><br><span class="line">mail_host =<span class="string">'smtp.exmail.qq.com'</span></span><br><span class="line">mail_user =<span class="string">'Strong It@*****.com'</span></span><br><span class="line">mail_<span class="built_in">pwd</span> = <span class="string">'*****'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#地址格式化函数</span></span><br><span class="line">def _format_addr(s):</span><br><span class="line">    name, addr = parseaddr(s)</span><br><span class="line">    <span class="built_in">return</span> formataddr(( \</span><br><span class="line">        Header(name, <span class="string">'utf-8'</span>).encode(), \</span><br><span class="line">        addr.encode(<span class="string">'utf-8'</span>) <span class="keyword">if</span> isinstance(addr, unicode) <span class="keyword">else</span> addr))</span><br><span class="line"></span><br><span class="line"><span class="comment">#发送邮件函数</span></span><br><span class="line">def send_email( content,mailto, get_sub ):</span><br><span class="line">    msg = MIMEText( content,_subtype = <span class="string">'plain'</span>, _charset = <span class="string">'utf-8'</span>)</span><br><span class="line">    <span class="comment">#msg = MIMEText(content,_subtype='plain',_charset='gb2312')</span></span><br><span class="line">    msg[<span class="string">'From'</span>] = _format_addr(u<span class="string">'Zabbix监控 &lt;%s&gt;'</span> % mail_user)</span><br><span class="line">    msg[<span class="string">'Subject'</span>] = _format_addr(u<span class="string">'报警信息 &lt;%s&gt;'</span> % get_sub)</span><br><span class="line">    msg[<span class="string">'To'</span>] = <span class="string">","</span>.join( mailto )  <span class="comment">#多邮件账号格式用,分开</span></span><br><span class="line">    try:</span><br><span class="line">        s = smtplib.SMTP_SSL( mail_host, 465)       </span><br><span class="line">        <span class="comment">#s = smtplib.SMTP( mail_host, 25)       </span></span><br><span class="line">        s.login(mail_user, mail_<span class="built_in">pwd</span> )</span><br><span class="line">        s.sendmail(mail_user, mailto,msg.as_string())</span><br><span class="line">        s.close()</span><br><span class="line">    except Exception as e:</span><br><span class="line">        <span class="built_in">return</span> <span class="string">'Exception: '</span>, e</span><br><span class="line"></span><br><span class="line"><span class="comment">#注意以下格式对齐</span></span><br><span class="line">title = sys.argv[2]</span><br><span class="line">cont = <span class="string">""</span><span class="string">"</span><br><span class="line">---------------------------------</span><br><span class="line">摘要：  </span><br><span class="line">%s</span><br><span class="line">---------------------------------</span><br><span class="line">时间：  %s</span><br><span class="line">---------------------------------</span><br><span class="line">  </span><br><span class="line">"</span><span class="string">""</span>%(sys.argv[3],current_time)</span><br><span class="line">  </span><br><span class="line">to_list = [</span><br><span class="line">         <span class="string">'%s'</span>%(sys.argv[1]),</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line"><span class="comment">#发送邮件的日志记录到/tmp/sendmail.log</span></span><br><span class="line">with open(<span class="string">'/tmp/sendmail_qs.log'</span>,<span class="string">'ab'</span>) as f:</span><br><span class="line">    f.write(<span class="string">'%s  Receive address:  %s Title: %s \n'</span>%(current_time,sys.argv[1],title))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    send_email( cont, to_list, title)</span><br></pre></td></tr></table></figure>
-<p>脚本名称：zabbix_email.py，使用格式：./zabbix_email.py 收件人 标题 邮件内容</p>
-<h3 id="2、更改zabbix配置文件的脚本路径"><a href="#2、更改zabbix配置文件的脚本路径" class="headerlink" title="2、更改zabbix配置文件的脚本路径"></a>2、更改zabbix配置文件的脚本路径</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix alertscripts]<span class="comment"># cat /etc/zabbix/zabbix_server.conf |grep AlertScriptsPath</span></span><br><span class="line"><span class="comment">### Option: AlertScriptsPath</span></span><br><span class="line"><span class="comment"># AlertScriptsPath=$&#123;datadir&#125;/zabbix/alertscripts</span></span><br><span class="line">AlertScriptsPath=/usr/lib/zabbix/alertscripts</span><br></pre></td></tr></table></figure>
-<h3 id="3、关联脚本名称"><a href="#3、关联脚本名称" class="headerlink" title="3、关联脚本名称"></a>3、关联脚本名称</h3><p>【Administration –&gt; Media types】</p>
-<p><img src="/img/media-types.png" alt=""></p>
-<h3 id="4、用户设置收件邮箱与报警时间"><a href="#4、用户设置收件邮箱与报警时间" class="headerlink" title="4、用户设置收件邮箱与报警时间"></a>4、用户设置收件邮箱与报警时间</h3><p>【Administration –&gt; Users】</p>
-<p><img src="/img/zabbix-user.png" alt=""></p>
-<p><img src="/img/user-permission.png" alt=""></p>
-<h3 id="5、配置报警触发器"><a href="#5、配置报警触发器" class="headerlink" title="5、配置报警触发器"></a>5、配置报警触发器</h3><p>【Configuration –&gt; Actions】</p>
-<p><img src="/img/zabbix-action.png" alt=""></p>
-<p><img src="/img/action-operation.png" alt=""></p>
-<h3 id="6、添加多个用户，同时给多个人发邮件"><a href="#6、添加多个用户，同时给多个人发邮件" class="headerlink" title="6、添加多个用户，同时给多个人发邮件"></a>6、添加多个用户，同时给多个人发邮件</h3><p>【Administration –&gt; Users】</p>
-<p><img src="/img/multi-user.png" alt=""></p>
-<h3 id="7、接收邮件报警测试"><a href="#7、接收邮件报警测试" class="headerlink" title="7、接收邮件报警测试"></a>7、接收邮件报警测试</h3><p><img src="/img/test-email.png" alt=""></p>
-<p>至此，Zabbix邮件告警已完成。</p>
-
+<h3 id="1、发送邮件的脚本"><a href="#1、发送邮件的脚本" class="headerlink" title="1、发送邮件的脚本"></a>1、发送邮件的脚本</h3>
       
     </div>
     
@@ -724,6 +605,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/05/01/zabbix-email/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

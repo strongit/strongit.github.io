@@ -42,7 +42,7 @@ TCP 端口：2181,2376,2888,3888,6379
 MySQL 数据库
 至少 1GB 内存
 每 Rancher Server 节点 50">
-<meta property="og:updated_time" content="2016-07-05T07:09:35.453Z">
+<meta property="og:updated_time" content="2016-07-08T10:58:42.742Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="多节点高可用(HA)">
 <meta name="twitter:description" content="基于 Rancher v1.0.1需求
@@ -288,7 +288,8 @@ MySQL 数据库
 <h4 id="建议使用更大的部署"><a href="#建议使用更大的部署" class="headerlink" title="建议使用更大的部署"></a>建议使用更大的部署</h4><ul>
 <li>每个 Rancher Server 节点应该有 4GB 或 8GB 可用内存，意味着至少需要 8GB 或 16GB 的物理内存</li>
 <li>MySQL 数据库应该使用高速的磁盘</li>
-<li>对于真正的高可用，建议使用复制的 MySQL 并做适当的备份。由于存在事物锁，可以选择 Galera 或强制写入单节点的方式。</li>
+<li>对于真正的高可用，建议使用复制的 MySQL 并做适当的备份。由于存在事物锁，可以选择 Galera 或强制写入单节点的方式。<a id="more"></a>
+</li>
 </ul>
 <h4 id="配置高可用-HA-的准备"><a href="#配置高可用-HA-的准备" class="headerlink" title="配置高可用(HA)的准备"></a>配置高可用(HA)的准备</h4><ol>
 <li>根据 <a href="">使用外部数据库启动单节点</a> 说明部署一个至少拥有 1GB 内存的 MySQL 数据库，但是不要使用其中启动 Rancher Server 的相关指令。因为默认情况下， 用户只能从本地访问数据库，你需要授权所有 Rancher Server 节点的网络。</li>

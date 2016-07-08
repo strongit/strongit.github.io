@@ -24,7 +24,7 @@
 配置 DNS 记录。
 
 启动 Rancher 服务器">
-<meta property="og:updated_time" content="2016-07-05T07:09:58.400Z">
+<meta property="og:updated_time" content="2016-07-08T10:58:27.990Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SSL基本配置">
 <meta name="twitter:description" content="为了可以正常使用 https 地址访问 Rancher 服务器，您需要设置代理的证书卸载功能。同时，我们提供了一些配置 NGINX 或 Apache 代理的例子，当然，您也可以使用其他工具。
@@ -250,7 +250,7 @@
 <p><strong>注意：</strong></p>
 <p>在我们的示例中，我们假设代理运行在单独的容器中。如果您的代理计划由主机提供服务，需要将 Rancher 容器的 <code>8080</code> 端口映射至本地主机，可以向 <code>docker run</code> 命令添加参数 <code>-p 127.0.0.1:8080:8080</code> 实现。</p>
 </blockquote>
-<p>如果您想使用现有的 Rancher 实例，您可以基于现有的 Rancher 实例创建一个新的 Rancher 实例。</p>
+<p>如果您想使用现有的 Rancher 实例，您可以基于现有的 Rancher 实例创建一个新的 Rancher 实例。<br><a id="more"></a></p>
 <ul>
 <li>若 Rancher 实例的 MySQL 数据库运行在容器内，在启动新的 Rancher 实例时，请参照 <a href="">升级说明</a> 创建数据容器并且在启动时添加 <code>--volumes-from=&lt;data_container&gt;</code> 。</li>
 <li>若 Rancher 实例使用了 <a href="">绑定挂载数据库</a> 的方式，请参照 <a href="">绑定挂载实例升级说明</a>。</li>
