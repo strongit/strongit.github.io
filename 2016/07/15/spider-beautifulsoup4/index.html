@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>爬虫利器之BeautifulSoup4 | Strong It</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Beautiful Soup是python的一个库，最主要的功能是从网页抓取数据。官方解释如下：123Beautiful Soup提供一些简单的、python式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。Beautiful Soup自动将输入文档转换为Unicode编码，输出文档转换为u">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爬虫利器之BeautifulSoup4">
+<meta property="og:url" content="http://strongit.github.io/2016/07/15/spider-beautifulsoup4/index.html">
+<meta property="og:site_name" content="Strong It">
+<meta property="og:description" content="Beautiful Soup是python的一个库，最主要的功能是从网页抓取数据。官方解释如下：123Beautiful Soup提供一些简单的、python式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。Beautiful Soup自动将输入文档转换为Unicode编码，输出文档转换为u">
+<meta property="og:updated_time" content="2016-07-21T09:04:36.834Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="爬虫利器之BeautifulSoup4">
+<meta name="twitter:description" content="Beautiful Soup是python的一个库，最主要的功能是从网页抓取数据。官方解释如下：123Beautiful Soup提供一些简单的、python式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。Beautiful Soup自动将输入文档转换为Unicode编码，输出文档转换为u">
+  
+    <link rel="alternative" href="/atom.xml" title="Strong It" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/touxiang.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Strong It</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://strongit.blog.51cto.com/">创者思的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://xuzhougeng.top/">HopTop的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.17w8.cn/">一起玩linux</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.sctux.com/">运维人</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">从事Linux运维数年，专注于运维自动化、python</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Strong It</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/img/touxiang.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Strong It</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-spider-beautifulsoup4" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/15/spider-beautifulsoup4/" class="article-date">
+  	<time datetime="2016-07-14T16:00:00.000Z" itemprop="datePublished">2016-07-15</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      爬虫利器之BeautifulSoup4
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/爬虫/">爬虫</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Beautiful Soup是python的一个库，最主要的功能是从网页抓取数据。官方解释如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Beautiful Soup提供一些简单的、python式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。</span><br><span class="line">Beautiful Soup自动将输入文档转换为Unicode编码，输出文档转换为utf<span class="number">-8</span>编码。你不需要考虑编码方式，除非文档没有指定一个编码方式，这时，Beautiful Soup就不能自动识别编码方式了。然后，你仅仅需要说明一下原始编码方式就可以了。</span><br><span class="line">Beautiful Soup已成为和lxml、html6lib一样出色的python解释器，为用户灵活地提供不同的解析策略或强劲的速度。</span><br></pre></td></tr></table></figure></p>
+<p>语法：<br>| 解析器        | 使用方法   |  优势  |  劣势 |<br>| ——–   | —–:  | :—-:  |<br>| Python标准库     |     BeautifulSoup(markup, “html.parser”)| Python的内置标准库；执行速度适中；文档容错能力强     | Python 2.7.3 or 3.2.2)前 的版本中文档容错能力差<br>| lxml HTML 解析器        |   BeautifulSoup(markup, “lxml”)   |   速度快；文档容错能力强   | 需要安装C语言库<br>| lxml XML 解析器        |    BeautifulSoup(markup, [“lxml”, “xml”])BeautifulSoup(markup, “xml”)    |  速度快；唯一支持XML的解析器  | 需要安装C语言库<br>| html5lib  |  BeautifulSoup(markup, “html5lib”)   |  最好的容错性；以浏览器的方式解析文档；生成HTML5格式的文档 |  速度慢；不依赖外部扩展  |</p>
+<a id="more"></a>
+<h3 id="soup-select-选择标签问题"><a href="#soup-select-选择标签问题" class="headerlink" title="soup.select ( ) 选择标签问题"></a>soup.select ( ) 选择标签问题</h3><p>代码原型是这样的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">web_data = requests.get(<span class="string">'url'</span>)</span><br><span class="line">soup = BeautifulSoup(web_data.text,<span class="string">'lxml'</span>)</span><br><span class="line">data = soup.select(<span class="string">'选择内容'</span>)</span><br><span class="line"><span class="keyword">print</span> (data)</span><br></pre></td></tr></table></figure>
+<p>url: <a href="http://www.meihua.info/" target="_blank" rel="external">http://www.meihua.info/</a></p>
+<blockquote>
+<ul>
+<li>要截取一篇文章的以下字段：</li>
+<li>日期（今天）</li>
+<li>阅读量（阅读65）</li>
+<li>类型（业界）</li>
+<li>文章标签（微信，阅读量）</li>
+</ul>
+</blockquote>
+<p>那么在浏览器中鼠标右键点击审查 -&gt; 找到字段的具体代码 -&gt; 右键选择Copy -&gt; Copy selector，复制的内容如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">body &gt; div.main-frame &gt; div.news-list-list &gt; ul &gt; li:nth-child(<span class="number">1</span>) &gt; div.time &gt; span &gt; span:nth-child(<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>如果直接那这个作为select ( )的参数是不行的，li:nth-child(1)要去掉，这是CSS的高级选择器，而且select ( )不支持这种类型，去掉就行。然后还要查看html结构的层级（span）。</p>
+<p>以下是我修改的select ( )参数内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">body &gt; div.main-frame &gt; div.news-list-list &gt; ul.list.news-list &gt; li &gt; div.time &gt; span.desc-font.date &gt; span</span><br></pre></td></tr></table></figure>
+<p>运行代码试一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup <span class="keyword">as</span> bs</span><br><span class="line"></span><br><span class="line">web_data = requests.get(<span class="string">'http://www.meihua.info/?page=1'</span>)</span><br><span class="line"></span><br><span class="line">soup = bs(web_data.text,<span class="string">'lxml'</span>)</span><br><span class="line">post_date = soup.select(<span class="string">'body &gt; div.main-frame &gt; div.news-list-list &gt; ul.list.news-list &gt; li &gt; div.time &gt; span.desc-font.date &gt; span'</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> (post_date.get_text())</span><br><span class="line"></span><br><span class="line">--输出结果--</span><br><span class="line">今天</span><br></pre></td></tr></table></figure>
+<h3 id="编码输出问题"><a href="#编码输出问题" class="headerlink" title="编码输出问题"></a>编码输出问题</h3><p>在抓取这个网页 <a href="http://www.ikanchai.com/" target="_blank" rel="external">http://www.ikanchai.com/</a> 的时候，出现乱码，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup as bs</span><br><span class="line"></span><br><span class="line">web_data = requests.get('http://www.ikanchai.com/')</span><br><span class="line">soup = bs(web_data.text,'lxml')</span><br><span class="line">dates = soup.select('div.sort.channel.clearfix &gt; ul &gt; li &gt; a')</span><br><span class="line"></span><br><span class="line">for data in dates:</span><br><span class="line">    print (data)</span><br><span class="line">-----输出结果-----</span><br><span class="line">&lt;a href="http://www.ikanchai.com/view/"&gt;è§‚ç‚¹&lt;/a&gt;</span><br><span class="line">&lt;a href="http://www.ikanchai.com/start/"&gt;åˆ›æŠ•&lt;/a&gt;</span><br><span class="line">&lt;a href="http://www.ikanchai.com/evaluation/"&gt;è¯„æµ‹&lt;/a&gt;</span><br><span class="line">&lt;a href="http://www.ikanchai.com/vr/"&gt;VR&lt;/a&gt;</span><br><span class="line">&lt;a href="http://www.ikanchai.com/push/"&gt;ä¸“æ &lt;/a&gt;</span><br><span class="line">&lt;a href="http://app.ikanchai.com/roll.php"&gt;åŠ¨æ€&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>编码问题，加一句web_data.encoding = ‘utf-8’即可以了，具体的编码选择在html文档开头有说明。</p>
+<h3 id="get-text和get-的使用"><a href="#get-text和get-的使用" class="headerlink" title="get_text和get()的使用"></a>get_text和get()的使用</h3><blockquote>
+<ul>
+<li><p>get_text()，是返回选择的标签文本，具体可以参考文档：<a href="http://beautifulsoup.readthedocs.io/zh_CN/latest/#get-text" target="_blank" rel="external">http://beautifulsoup.readthedocs.io/zh_CN/latest/#get-text</a></p>
+</li>
+<li><p>get(‘’)，这是选择标签中的属性(也就是里面有=符号的左边)，比如</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;li&gt;&lt;a class="reference internal" href="#next-siblings-previous-siblings"&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<p>中，选择li &gt; a这个标签之后，则可以用get(‘href’)获取其中的链接。</p>
+<h3 id="findall-和select-的区别"><a href="#findall-和select-的区别" class="headerlink" title="findall()和select()的区别"></a>findall()和select()的区别</h3><p>待续</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/07/05/markdown/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Cmd Markdown 编辑器</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="spider-beautifulsoup4" data-title="爬虫利器之BeautifulSoup4" data-url="http://strongit.github.io/2016/07/15/spider-beautifulsoup4/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Strong It
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
