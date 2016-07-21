@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://strongit.github.io/2016/07/03/ansible-sample-playbook/</loc>
+    
+    <lastmod>2016-07-21T06:18:15.580Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://strongit.github.io/2016/07/01/ansible-sample-usage/</loc>
+    
+    <lastmod>2016-07-21T03:41:20.096Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://strongit.github.io/2016/04/28/rancher-03-Installing-Rancher-Single-Node/</loc>
     
     <lastmod>2016-07-08T10:58:55.614Z</lastmod>

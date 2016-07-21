@@ -110,7 +110,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
+						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
 					</div>
 				</section>
 				
@@ -185,6 +185,132 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-ansible-sample-playbook" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/03/ansible-sample-playbook/" class="article-date">
+  	<time datetime="2016-07-02T16:00:00.000Z" itemprop="datePublished">2016-07-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/03/ansible-sample-playbook/">Ansible Playbook应用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Playbooks 与 adhoc 相比,是一种完全不同的运用 ansible 的方式,是非常之强大的.简单来说,playbooks 是一种简单的配置管理系统与多机器部署系统的基础.与现有的其他系统有不同之处,且非常适合于复杂应用的部署.Playbooks 可用于声明配置,更强大的地方在于,在 playbooks 中可以编排有序的执行过程,甚至于做到在多组机器间,来回有序的执行特别指定的步骤.并且可以同步或异步的发起任务.我们使用 adhoc 时,主要是使用 /usr/bin/ansible 程序执行任务.而使用 playbooks 时,更多是将之放入源码控制之中,用之推送你的配置或是用于确认你的远程系统的配置是否符合配置规范.</p>
+<p>###目录结构</p>
+<p>以下为playbook标准的目录结构，以不同级别目录层级的文件进行拆分。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost playbooks]<span class="comment"># tree .</span></span><br><span class="line">.</span><br><span class="line">├── playbooks.yml</span><br><span class="line">├── roles</span><br><span class="line">│   ├── common</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   ├── handlers</span><br><span class="line">│   │   ├── meta</span><br><span class="line">│   │   ├── tasks</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── vars</span><br><span class="line">│   ├── mysql</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │   └── main.yml</span><br><span class="line">│   ├── nginx</span><br><span class="line">│   │   ├── handlers</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │   └── main.yml</span><br><span class="line">│   └── php-fpm</span><br><span class="line">│       └── tasks</span><br><span class="line">│       └── main.yml</span><br><span class="line">└── site.yml</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/03/ansible-sample-playbook/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-ansible-sample-usage" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/01/ansible-sample-usage/" class="article-date">
+  	<time datetime="2016-06-30T16:00:00.000Z" itemprop="datePublished">2016-07-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/01/ansible-sample-usage/">Ansible简单配置篇</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：<br>(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；<br>(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；<br>(3)、使用python编写，维护更简单；<br>(4)、基于SSH工作；<br>(5)、支持文件同步并且对修改之前的文件进行备份，支持回滚；</p>
+<p>官方原文档: <a href="https://docs.ansible.com/ansible/index.html">https://docs.ansible.com/ansible/index.html</a><br>中文翻译版：<a href="http://www.ansible.com.cn/index.html">http://www.ansible.com.cn/index.html</a></p>
+<p>###简单示例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ansible/hosts</span><br><span class="line"></span><br><span class="line">[ts]</span><br><span class="line">192.168.1.106</span><br><span class="line">执行命令 ansible ts -m ping</span><br><span class="line"></span><br><span class="line">192.168.1.106 | success &gt;&gt; &#123;</span><br><span class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/01/ansible-sample-usage/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-mongodb-howto-nodejs-atom-op-mongodb" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -457,159 +583,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/06/10/rancher-03-Installing-Rancher-Basic-Ssl-Config/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-rancher-03-Installing-Rancher-Multi-Nodes" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/" class="article-date">
-  	<time datetime="2016-06-03T16:00:00.000Z" itemprop="datePublished">2016-06-04</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/">多节点高可用(HA)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h6 id="基于-Rancher-v1-0-1"><a href="#基于-Rancher-v1-0-1" class="headerlink" title="基于 Rancher v1.0.1"></a>基于 Rancher v1.0.1</h6><h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><ul>
-<li>多节点的HA配置请参照单一节点<a href="">需求</a><ul>
-<li>节点需要开放的端口<ul>
-<li>全局访问：TCP 端口<code>22</code>,<code>80</code>,<code>443</code>,<code>18080</code>（可选：用于在集群启动前 <a href="">查看并管理栈</a> ）</li>
-<li>节点间连接：<ul>
-<li>UDP 端口：<code>500</code>,<code>4500</code></li>
-<li>TCP 端口：<code>2181</code>,<code>2376</code>,<code>2888</code>,<code>3888</code>,<code>6379</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>MySQL 数据库<ul>
-<li>至少 1GB 内存</li>
-<li>每 Rancher Server 节点 50 连接（如：一个 3 节点的安装至少需要支持 150 连接）</li>
-</ul>
-</li>
-<li>外部负载均衡器</li>
-</ul>
-<h4 id="建议使用更大的部署"><a href="#建议使用更大的部署" class="headerlink" title="建议使用更大的部署"></a>建议使用更大的部署</h4><ul>
-<li>每个 Rancher Server 节点应该有 4GB 或 8GB 可用内存，意味着至少需要 8GB 或 16GB 的物理内存</li>
-<li>MySQL 数据库应该使用高速的磁盘</li>
-<li>对于真正的高可用，建议使用复制的 MySQL 并做适当的备份。由于存在事物锁，可以选择 Galera 或强制写入单节点的方式。
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rancher/">rancher</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-zabbix-email" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/05/01/zabbix-email/" class="article-date">
-  	<time datetime="2016-04-30T16:00:00.000Z" itemprop="datePublished">2016-05-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/01/zabbix-email/">Zabbix邮件报警脚本</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Zabbix安装教程请移步 <a href="http://strongit.blog.51cto.com/10020534/1709616">Zabbix Install</a><br>zabbix邮件报警配置步骤说明：</p>
-<blockquote>
-<p>1、准备一个发送邮件的脚本</p>
-<p>2、修改zabbix配置文件中指定的脚本路径</p>
-<p>3、关联脚本名称</p>
-<p>4、用户设置收件邮箱与报警时间</p>
-<p>5、配置报警触发器</p>
-<p>6、添加多个用户，同时给多个人发邮件</p>
-<p>7、邮件接收测试</p>
-</blockquote>
-<h3 id="1、发送邮件的脚本"><a href="#1、发送邮件的脚本" class="headerlink" title="1、发送邮件的脚本"></a>1、发送邮件的脚本</h3>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/05/01/zabbix-email/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Ansible简单配置篇 | Strong It</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；(3)、使用python编写，维护更简单；(4)、基于SSH工">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ansible简单配置篇">
+<meta property="og:url" content="http://strongit.github.io/2016/07/01/ansible-sample-usage/index.html">
+<meta property="og:site_name" content="Strong It">
+<meta property="og:description" content="ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；(3)、使用python编写，维护更简单；(4)、基于SSH工">
+<meta property="og:updated_time" content="2016-07-21T03:41:20.096Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ansible简单配置篇">
+<meta name="twitter:description" content="ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；(3)、使用python编写，维护更简单；(4)、基于SSH工">
+  
+    <link rel="alternative" href="/atom.xml" title="Strong It" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/touxiang.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Strong It</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://strongit.blog.51cto.com/">创者思的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://xuzhougeng.top/">HopTop的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.17w8.cn/">一起玩linux</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.sctux.com/">运维人</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">从事Linux运维数年，专注于运维自动化、python</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Strong It</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/img/touxiang.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Strong It</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-ansible-sample-usage" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/01/ansible-sample-usage/" class="article-date">
+  	<time datetime="2016-06-30T16:00:00.000Z" itemprop="datePublished">2016-07-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Ansible简单配置篇
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：<br>(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；<br>(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；<br>(3)、使用python编写，维护更简单；<br>(4)、基于SSH工作；<br>(5)、支持文件同步并且对修改之前的文件进行备份，支持回滚；</p>
+<p>官方原文档: <a href="https://docs.ansible.com/ansible/index.html" target="_blank" rel="external">https://docs.ansible.com/ansible/index.html</a><br>中文翻译版：<a href="http://www.ansible.com.cn/index.html" target="_blank" rel="external">http://www.ansible.com.cn/index.html</a></p>
+<p>###简单示例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ansible/hosts</span><br><span class="line"></span><br><span class="line">[ts]</span><br><span class="line">192.168.1.106</span><br><span class="line">执行命令 ansible ts -m ping</span><br><span class="line"></span><br><span class="line">192.168.1.106 | success &gt;&gt; &#123;</span><br><span class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>###主机或组规则</p>
+<p>目录 /etc/ansible/hosts</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Ex 1: 未分组的主机.</span></span><br><span class="line"></span><br><span class="line">green.example.com</span><br><span class="line">blue.example.com</span><br><span class="line">192.168.100.1</span><br><span class="line">192.168.100.10</span><br><span class="line"></span><br><span class="line">＃自定义webservers组</span><br><span class="line">[webservers]</span><br><span class="line">alpha.example.org</span><br><span class="line">beta.example.org</span><br><span class="line">192.168.1.100</span><br><span class="line">192.168.1.110</span><br><span class="line"><span class="comment">#使用正则表达式</span></span><br><span class="line">www[001:006].example.com</span><br></pre></td></tr></table></figure>
+<p>分离主机与组的特定数据，Ansible支持将/etc/ansible/hosts定义的主机名与变量单独剥离出来放到指定存放文件中，以YAML格式保存</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/ansible/group_vars/</span><br><span class="line">/etc/ansible/host_vars/</span><br></pre></td></tr></table></figure>
+<p>###模块应用</p>
+<p>远程命令模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m <span class="built_in">command</span> <span class="_">-a</span> <span class="string">"ls /"</span></span><br><span class="line">ansible dbserver -m script <span class="_">-a</span> <span class="string">"ats.sh start"</span></span><br><span class="line">ansible dbserver -m shell <span class="_">-a</span> <span class="string">"ats.sh"</span></span><br></pre></td></tr></table></figure>
+<p>复制模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m copy <span class="_">-a</span> <span class="string">"src=/1.txt dest=/data/  owner=root  group=root  mode=777"</span></span><br></pre></td></tr></table></figure>
+<p>查看文件状态模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m <span class="built_in">stat</span> <span class="_">-a</span> <span class="string">"path=/data/1.txt"</span></span><br></pre></td></tr></table></figure>
+<p>URL下载模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m get_url <span class="_">-a</span> <span class="string">"url=http://letong.me   dest=/data/  mode=777  force=yes"</span></span><br></pre></td></tr></table></figure>
+<p>yum模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m yum <span class="_">-a</span> <span class="string">"name=git state=latest"</span></span><br></pre></td></tr></table></figure>
+<p>service模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m service <span class="_">-a</span> <span class="string">"name=httpd state=restarted"</span></span><br></pre></td></tr></table></figure>
+<p>user模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m user <span class="_">-a</span> <span class="string">"name=letong comment='Hello letong' "</span></span><br><span class="line">ansible dbserver -m user <span class="_">-a</span> <span class="string">"name=letong state=absent  remove=yes"</span></span><br></pre></td></tr></table></figure>
+<p>mount模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m mount <span class="_">-a</span> <span class="string">"name=/data  src=/dev/sdb1  fstype=ext4  opts=ro  state=present"</span></span><br></pre></td></tr></table></figure>
+<p>cron模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible ts -m cron <span class="_">-a</span> <span class="string">"name='ls dir'  hour='5,2'  job='ls -l'"</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/03/ansible-sample-playbook/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Ansible Playbook应用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/06/21/mongodb-howto-nodejs-atom-op-mongodb/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Node.js原子性操作MongoDB</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="ansible-sample-usage" data-title="Ansible简单配置篇" data-url="http://strongit.github.io/2016/07/01/ansible-sample-usage/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Strong It
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

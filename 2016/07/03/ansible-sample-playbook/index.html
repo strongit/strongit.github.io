@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Ansible Playbook应用 | Strong It</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Playbooks 与 adhoc 相比,是一种完全不同的运用 ansible 的方式,是非常之强大的.简单来说,playbooks 是一种简单的配置管理系统与多机器部署系统的基础.与现有的其他系统有不同之处,且非常适合于复杂应用的部署.Playbooks 可用于声明配置,更强大的地方在于,在 playbooks 中可以编排有序的执行过程,甚至于做到在多组机器间,来回有序的执行特别指定的步骤.并且">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ansible Playbook应用">
+<meta property="og:url" content="http://strongit.github.io/2016/07/03/ansible-sample-playbook/index.html">
+<meta property="og:site_name" content="Strong It">
+<meta property="og:description" content="Playbooks 与 adhoc 相比,是一种完全不同的运用 ansible 的方式,是非常之强大的.简单来说,playbooks 是一种简单的配置管理系统与多机器部署系统的基础.与现有的其他系统有不同之处,且非常适合于复杂应用的部署.Playbooks 可用于声明配置,更强大的地方在于,在 playbooks 中可以编排有序的执行过程,甚至于做到在多组机器间,来回有序的执行特别指定的步骤.并且">
+<meta property="og:updated_time" content="2016-07-21T06:18:15.580Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ansible Playbook应用">
+<meta name="twitter:description" content="Playbooks 与 adhoc 相比,是一种完全不同的运用 ansible 的方式,是非常之强大的.简单来说,playbooks 是一种简单的配置管理系统与多机器部署系统的基础.与现有的其他系统有不同之处,且非常适合于复杂应用的部署.Playbooks 可用于声明配置,更强大的地方在于,在 playbooks 中可以编排有序的执行过程,甚至于做到在多组机器间,来回有序的执行特别指定的步骤.并且">
+  
+    <link rel="alternative" href="/atom.xml" title="Strong It" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/touxiang.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Strong It</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://strongit.blog.51cto.com/">创者思的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://xuzhougeng.top/">HopTop的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.17w8.cn/">一起玩linux</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.sctux.com/">运维人</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">从事Linux运维数年，专注于运维自动化、python</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Strong It</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/img/touxiang.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Strong It</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/strongit/" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2108950522" title="weibo">weibo</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-ansible-sample-playbook" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/03/ansible-sample-playbook/" class="article-date">
+  	<time datetime="2016-07-02T16:00:00.000Z" itemprop="datePublished">2016-07-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Ansible Playbook应用
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Playbooks 与 adhoc 相比,是一种完全不同的运用 ansible 的方式,是非常之强大的.简单来说,playbooks 是一种简单的配置管理系统与多机器部署系统的基础.与现有的其他系统有不同之处,且非常适合于复杂应用的部署.Playbooks 可用于声明配置,更强大的地方在于,在 playbooks 中可以编排有序的执行过程,甚至于做到在多组机器间,来回有序的执行特别指定的步骤.并且可以同步或异步的发起任务.我们使用 adhoc 时,主要是使用 /usr/bin/ansible 程序执行任务.而使用 playbooks 时,更多是将之放入源码控制之中,用之推送你的配置或是用于确认你的远程系统的配置是否符合配置规范.</p>
+<p>###目录结构</p>
+<p>以下为playbook标准的目录结构，以不同级别目录层级的文件进行拆分。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost playbooks]<span class="comment"># tree .</span></span><br><span class="line">.</span><br><span class="line">├── playbooks.yml</span><br><span class="line">├── roles</span><br><span class="line">│   ├── common</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   ├── handlers</span><br><span class="line">│   │   ├── meta</span><br><span class="line">│   │   ├── tasks</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── vars</span><br><span class="line">│   ├── mysql</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │   └── main.yml</span><br><span class="line">│   ├── nginx</span><br><span class="line">│   │   ├── handlers</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │   └── main.yml</span><br><span class="line">│   └── php-fpm</span><br><span class="line">│       └── tasks</span><br><span class="line">│       └── main.yml</span><br><span class="line">└── site.yml</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>site.yml，playbook主要配置文件，例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">- name: Install web</span><br><span class="line">  hosts: webserver</span><br><span class="line">  user: root</span><br><span class="line">  roles:</span><br><span class="line">    - common</span><br><span class="line">    - nginx</span><br><span class="line">    - mysql</span><br></pre></td></tr></table></figure>
+<p>../tasks/main.yml，任务文件，例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">- name: Install nginx</span><br><span class="line">  yum: name=nginx state=present</span><br><span class="line">  notify: start nginx</span><br></pre></td></tr></table></figure>
+<p>../handlers/main.yml，处理程序文件，例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">- name: start nginx</span><br><span class="line">  service: name=nginx state=started</span><br></pre></td></tr></table></figure>
+<p>../vars/main.yml，变量文件，例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">ntpserver: time.windows.com</span><br></pre></td></tr></table></figure>
+<p>../templates/，用于template调用，例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">- name: copy configure</span><br><span class="line">  template: src=nginx.conf  dest=/etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+<p>../files/，其内的文件无需路径，直接引用，例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">- name: include files</span><br><span class="line">  - include: nginx.yml</span><br></pre></td></tr></table></figure>
+<h3 id="条件与循环"><a href="#条件与循环" class="headerlink" title="条件与循环"></a>条件与循环</h3><p>如果系统为redhat则重启</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tasks:</span><br><span class="line">  - name: reboot redhat host</span><br><span class="line">    <span class="built_in">command</span>: /usr/sbin/reboot</span><br><span class="line">    when: ansible_os_family == <span class="string">"RedHat"</span></span><br></pre></td></tr></table></figure>
+<p>如果result为成功状态则重启</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tasks:</span><br><span class="line">  - <span class="built_in">command</span>: /bin/<span class="literal">false</span></span><br><span class="line">    register: result</span><br><span class="line">    ignore_errors: True</span><br><span class="line"></span><br><span class="line">  - <span class="built_in">command</span>: /usr/sbin/reboot</span><br><span class="line">    when: result|success</span><br></pre></td></tr></table></figure>
+<p>循环语句基础</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tasks:</span><br><span class="line">  - name: install LNMP</span><br><span class="line">    yum: name=&#123;&#123; item &#125;&#125; state=present</span><br><span class="line">    with_items:</span><br><span class="line">       - nginx</span><br><span class="line">       - mysql-server</span><br><span class="line">       - php-fpm</span><br></pre></td></tr></table></figure>
+<p>循环还支持列表，使用with_flattened语句。 变量文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">packages_LNMP:</span><br><span class="line">  - [ <span class="string">'nginx'</span>, <span class="string">'mysql-server'</span>, <span class="string">'php-fpm'</span> ]</span><br></pre></td></tr></table></figure>
+<p>引用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- name: Install LNMP</span><br><span class="line">  yum: name=&#123;&#123; item &#125;&#125; state=present</span><br><span class="line">  with_flattened:</span><br><span class="line">     - packages_LNMP</span><br></pre></td></tr></table></figure>
+<p>###简单示例</p>
+<p>nginx安装的playbook示例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">- hosts: webserver <span class="comment">#指定主机或组</span></span><br><span class="line">tasks:</span><br><span class="line"> - name: Install nginx epel</span><br><span class="line">   <span class="built_in">command</span>: /usr/bin/rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br><span class="line"> - name: Install nginx</span><br><span class="line">   yum: name=nginx state=present</span><br><span class="line">   notify:</span><br><span class="line">   - start nginx</span><br><span class="line"></span><br><span class="line"> - name: configure nginx</span><br><span class="line">   template: src=letong.conf dest=/etc/nginx/conf.d/ </span><br><span class="line"></span><br><span class="line"> - name: configure www dir</span><br><span class="line">   <span class="built_in">command</span>: cp -r letong-web/ /www/ </span><br><span class="line"></span><br><span class="line"> handlers:</span><br><span class="line">   - name: start nginx</span><br><span class="line">     service: name=nginx state=started</span><br></pre></td></tr></table></figure>
+<p>执行测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost playbooks]<span class="comment"># ansible-playbook playbooks.yml </span></span><br><span class="line"></span><br><span class="line">PLAY [webserver] ************************************************************** </span><br><span class="line">GATHERING FACTS *************************************************************** </span><br><span class="line">ok: [192.168.1.68]</span><br><span class="line"></span><br><span class="line">TASK: [Install nginx] ********************************************************* </span><br><span class="line">changed: [192.168.1.68]</span><br><span class="line"></span><br><span class="line">NOTIFIED: [start nginx] ******************************************************* </span><br><span class="line">changed: [192.168.1.68]</span><br><span class="line"></span><br><span class="line">PLAY RECAP ******************************************************************** </span><br><span class="line">192.168.1.68               : ok=3    changed=2    unreachable=0   failed=0</span><br></pre></td></tr></table></figure>
+<p>访问测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost playbooks]<span class="comment"># curl -I http://192.168.1.68</span></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Server: nginx/1.6.2</span><br><span class="line">Date: Thu, 11 Dec 2015 05:00:13 GMT</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Content-Length: 3700</span><br><span class="line">Last-Modified: Wed, 22 Oct 2015 19:50:12 GMT</span><br><span class="line">Connection: keep-alive</span><br><span class="line">ETag: <span class="string">"54480a74-e74"</span></span><br><span class="line">Accept-Ranges: bytes</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/07/01/ansible-sample-usage/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Ansible简单配置篇</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="ansible-sample-playbook" data-title="Ansible Playbook应用" data-url="http://strongit.github.io/2016/07/03/ansible-sample-playbook/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Strong It
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

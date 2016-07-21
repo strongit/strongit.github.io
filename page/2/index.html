@@ -110,7 +110,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
+						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
 					</div>
 				</section>
 				
@@ -186,6 +186,159 @@
 
       <div class="body-wrap">
   
+    <article id="post-rancher-03-Installing-Rancher-Multi-Nodes" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/" class="article-date">
+  	<time datetime="2016-06-03T16:00:00.000Z" itemprop="datePublished">2016-06-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/">多节点高可用(HA)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h6 id="基于-Rancher-v1-0-1"><a href="#基于-Rancher-v1-0-1" class="headerlink" title="基于 Rancher v1.0.1"></a>基于 Rancher v1.0.1</h6><h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><ul>
+<li>多节点的HA配置请参照单一节点<a href="">需求</a><ul>
+<li>节点需要开放的端口<ul>
+<li>全局访问：TCP 端口<code>22</code>,<code>80</code>,<code>443</code>,<code>18080</code>（可选：用于在集群启动前 <a href="">查看并管理栈</a> ）</li>
+<li>节点间连接：<ul>
+<li>UDP 端口：<code>500</code>,<code>4500</code></li>
+<li>TCP 端口：<code>2181</code>,<code>2376</code>,<code>2888</code>,<code>3888</code>,<code>6379</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MySQL 数据库<ul>
+<li>至少 1GB 内存</li>
+<li>每 Rancher Server 节点 50 连接（如：一个 3 节点的安装至少需要支持 150 连接）</li>
+</ul>
+</li>
+<li>外部负载均衡器</li>
+</ul>
+<h4 id="建议使用更大的部署"><a href="#建议使用更大的部署" class="headerlink" title="建议使用更大的部署"></a>建议使用更大的部署</h4><ul>
+<li>每个 Rancher Server 节点应该有 4GB 或 8GB 可用内存，意味着至少需要 8GB 或 16GB 的物理内存</li>
+<li>MySQL 数据库应该使用高速的磁盘</li>
+<li>对于真正的高可用，建议使用复制的 MySQL 并做适当的备份。由于存在事物锁，可以选择 Galera 或强制写入单节点的方式。
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rancher/">rancher</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/04/rancher-03-Installing-Rancher-Multi-Nodes/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-zabbix-email" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/01/zabbix-email/" class="article-date">
+  	<time datetime="2016-04-30T16:00:00.000Z" itemprop="datePublished">2016-05-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/01/zabbix-email/">Zabbix邮件报警脚本</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Zabbix安装教程请移步 <a href="http://strongit.blog.51cto.com/10020534/1709616">Zabbix Install</a><br>zabbix邮件报警配置步骤说明：</p>
+<blockquote>
+<p>1、准备一个发送邮件的脚本</p>
+<p>2、修改zabbix配置文件中指定的脚本路径</p>
+<p>3、关联脚本名称</p>
+<p>4、用户设置收件邮箱与报警时间</p>
+<p>5、配置报警触发器</p>
+<p>6、添加多个用户，同时给多个人发邮件</p>
+<p>7、邮件接收测试</p>
+</blockquote>
+<h3 id="1、发送邮件的脚本"><a href="#1、发送邮件的脚本" class="headerlink" title="1、发送邮件的脚本"></a>1、发送邮件的脚本</h3>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zabbix/">zabbix</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/05/01/zabbix-email/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-rancher-03-Installing-Rancher-Single-Node" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -255,69 +408,6 @@
 
 
   
-    <article id="post-EMOS" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/04/23/EMOS/" class="article-date">
-  	<time datetime="2016-04-22T16:00:00.000Z" itemprop="datePublished">2016-04-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/23/EMOS/">EMOS的安装与使用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>EMOS是一个基于CentOS，集成了ExtMail Server全部组件的小型Linux系统，10分钟即可完成安装及配置，成为完备的企业邮局系统。它的诞生将彻底改变邮件系统复杂的安装和配置局面，使只具备基本linux知识的用户就可轻松架设邮局。</p>
-<h2 id="获取软件"><a href="#获取软件" class="headerlink" title="获取软件"></a>获取软件</h2><h3 id="百度云盘地址："><a href="#百度云盘地址：" class="headerlink" title="百度云盘地址："></a>百度云盘地址：</h3><p><a href="http://pan.baidu.com/s/1nvaSrUh">EMOS</a> 访问密码：lcr4</p>
-<h3 id="yum安装方式："><a href="#yum安装方式：" class="headerlink" title="yum安装方式："></a>yum安装方式：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@emos /]<span class="comment"># vi /etc/yum.repos.d/EMOS-Base.repo</span></span><br><span class="line"><span class="comment"># EMOS-Base.repo</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Created by ExtMail Dev Team: http://www.extmail.org/</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># $Id$</span></span><br><span class="line"></span><br><span class="line">[EMOS-base]</span><br><span class="line">name=EMOS-Base</span><br><span class="line">baseurl=http://mirror.extmail.org/yum/emos/1.5/os/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=0</span><br><span class="line">protect=0</span><br><span class="line"></span><br><span class="line">[EMOS-update]</span><br><span class="line">name=EMOS-Updates</span><br><span class="line">baseurl=http://mirror.extmail.org/yum/emos/1.5/updates/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=0</span><br><span class="line">protect=0</span><br></pre></td></tr></table></figure>
-<p>保存后，然后尝试执行一下yum list 等操作，看看是否已经成功；<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Extmail/">Extmail</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/04/23/EMOS/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -364,6 +454,69 @@
       
         <p class="article-more-link">
           <a  href="/2016/04/23/hello-world/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-EMOS" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/04/23/EMOS/" class="article-date">
+  	<time datetime="2016-04-22T16:00:00.000Z" itemprop="datePublished">2016-04-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/23/EMOS/">EMOS的安装与使用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>EMOS是一个基于CentOS，集成了ExtMail Server全部组件的小型Linux系统，10分钟即可完成安装及配置，成为完备的企业邮局系统。它的诞生将彻底改变邮件系统复杂的安装和配置局面，使只具备基本linux知识的用户就可轻松架设邮局。</p>
+<h2 id="获取软件"><a href="#获取软件" class="headerlink" title="获取软件"></a>获取软件</h2><h3 id="百度云盘地址："><a href="#百度云盘地址：" class="headerlink" title="百度云盘地址："></a>百度云盘地址：</h3><p><a href="http://pan.baidu.com/s/1nvaSrUh">EMOS</a> 访问密码：lcr4</p>
+<h3 id="yum安装方式："><a href="#yum安装方式：" class="headerlink" title="yum安装方式："></a>yum安装方式：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@emos /]<span class="comment"># vi /etc/yum.repos.d/EMOS-Base.repo</span></span><br><span class="line"><span class="comment"># EMOS-Base.repo</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Created by ExtMail Dev Team: http://www.extmail.org/</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># $Id$</span></span><br><span class="line"></span><br><span class="line">[EMOS-base]</span><br><span class="line">name=EMOS-Base</span><br><span class="line">baseurl=http://mirror.extmail.org/yum/emos/1.5/os/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=0</span><br><span class="line">protect=0</span><br><span class="line"></span><br><span class="line">[EMOS-update]</span><br><span class="line">name=EMOS-Updates</span><br><span class="line">baseurl=http://mirror.extmail.org/yum/emos/1.5/updates/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=0</span><br><span class="line">protect=0</span><br></pre></td></tr></table></figure>
+<p>保存后，然后尝试执行一下yum list 等操作，看看是否已经成功；<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Extmail/">Extmail</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/04/23/EMOS/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
