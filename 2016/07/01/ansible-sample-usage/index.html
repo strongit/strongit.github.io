@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://strongit.github.io/2016/07/01/ansible-sample-usage/index.html">
 <meta property="og:site_name" content="Strong It">
 <meta property="og:description" content="ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；(3)、使用python编写，维护更简单；(4)、基于SSH工">
-<meta property="og:updated_time" content="2016-07-21T03:41:20.096Z">
+<meta property="og:updated_time" content="2016-07-21T06:23:32.223Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ansible简单配置篇">
 <meta name="twitter:description" content="ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；(3)、使用python编写，维护更简单；(4)、基于SSH工">
@@ -111,7 +111,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
+						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a>
 					</div>
 				</section>
 				
@@ -224,16 +224,13 @@
       
         <p>ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：<br>(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；<br>(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；<br>(3)、使用python编写，维护更简单；<br>(4)、基于SSH工作；<br>(5)、支持文件同步并且对修改之前的文件进行备份，支持回滚；</p>
 <p>官方原文档: <a href="https://docs.ansible.com/ansible/index.html" target="_blank" rel="external">https://docs.ansible.com/ansible/index.html</a><br>中文翻译版：<a href="http://www.ansible.com.cn/index.html" target="_blank" rel="external">http://www.ansible.com.cn/index.html</a></p>
-<p>###简单示例</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ansible/hosts</span><br><span class="line"></span><br><span class="line">[ts]</span><br><span class="line">192.168.1.106</span><br><span class="line">执行命令 ansible ts -m ping</span><br><span class="line"></span><br><span class="line">192.168.1.106 | success &gt;&gt; &#123;</span><br><span class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ansible/hosts</span><br><span class="line"></span><br><span class="line">[ts]</span><br><span class="line">192.168.1.106</span><br><span class="line">执行命令 ansible ts -m ping</span><br><span class="line"></span><br><span class="line">192.168.1.106 | success &gt;&gt; &#123;</span><br><span class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<p>###主机或组规则</p>
-<p>目录 /etc/ansible/hosts</p>
+<h3 id="主机或组规则"><a href="#主机或组规则" class="headerlink" title="主机或组规则"></a>主机或组规则</h3><p>目录 /etc/ansible/hosts</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Ex 1: 未分组的主机.</span></span><br><span class="line"></span><br><span class="line">green.example.com</span><br><span class="line">blue.example.com</span><br><span class="line">192.168.100.1</span><br><span class="line">192.168.100.10</span><br><span class="line"></span><br><span class="line">＃自定义webservers组</span><br><span class="line">[webservers]</span><br><span class="line">alpha.example.org</span><br><span class="line">beta.example.org</span><br><span class="line">192.168.1.100</span><br><span class="line">192.168.1.110</span><br><span class="line"><span class="comment">#使用正则表达式</span></span><br><span class="line">www[001:006].example.com</span><br></pre></td></tr></table></figure>
 <p>分离主机与组的特定数据，Ansible支持将/etc/ansible/hosts定义的主机名与变量单独剥离出来放到指定存放文件中，以YAML格式保存</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/ansible/group_vars/</span><br><span class="line">/etc/ansible/host_vars/</span><br></pre></td></tr></table></figure>
-<p>###模块应用</p>
-<p>远程命令模块</p>
+<h3 id="模块应用"><a href="#模块应用" class="headerlink" title="模块应用"></a>模块应用</h3><p>远程命令模块</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m <span class="built_in">command</span> <span class="_">-a</span> <span class="string">"ls /"</span></span><br><span class="line">ansible dbserver -m script <span class="_">-a</span> <span class="string">"ats.sh start"</span></span><br><span class="line">ansible dbserver -m shell <span class="_">-a</span> <span class="string">"ats.sh"</span></span><br></pre></td></tr></table></figure>
 <p>复制模块</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible dbserver -m copy <span class="_">-a</span> <span class="string">"src=/1.txt dest=/data/  owner=root  group=root  mode=777"</span></span><br></pre></td></tr></table></figure>
