@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://strongit.github.io/2016/07/15/spider-beautifulsoup4/index.html">
 <meta property="og:site_name" content="Strong It">
 <meta property="og:description" content="Beautiful Soup是python的一个库，最主要的功能是从网页抓取数据。官方解释如下：123Beautiful Soup提供一些简单的、python式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。Beautiful Soup自动将输入文档转换为Unicode编码，输出文档转换为u">
-<meta property="og:updated_time" content="2016-07-21T09:04:36.834Z">
+<meta property="og:updated_time" content="2016-07-21T09:20:01.328Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="爬虫利器之BeautifulSoup4">
 <meta name="twitter:description" content="Beautiful Soup是python的一个库，最主要的功能是从网页抓取数据。官方解释如下：123Beautiful Soup提供一些简单的、python式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。Beautiful Soup自动将输入文档转换为Unicode编码，输出文档转换为u">
@@ -111,7 +111,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
 					</div>
 				</section>
 				
@@ -223,9 +223,17 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Beautiful Soup是python的一个库，最主要的功能是从网页抓取数据。官方解释如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Beautiful Soup提供一些简单的、python式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。</span><br><span class="line">Beautiful Soup自动将输入文档转换为Unicode编码，输出文档转换为utf<span class="number">-8</span>编码。你不需要考虑编码方式，除非文档没有指定一个编码方式，这时，Beautiful Soup就不能自动识别编码方式了。然后，你仅仅需要说明一下原始编码方式就可以了。</span><br><span class="line">Beautiful Soup已成为和lxml、html6lib一样出色的python解释器，为用户灵活地提供不同的解析策略或强劲的速度。</span><br></pre></td></tr></table></figure></p>
-<p>语法：<br>| 解析器        | 使用方法   |  优势  |  劣势 |<br>| ——–   | —–:  | :—-:  |<br>| Python标准库     |     BeautifulSoup(markup, “html.parser”)| Python的内置标准库；执行速度适中；文档容错能力强     | Python 2.7.3 or 3.2.2)前 的版本中文档容错能力差<br>| lxml HTML 解析器        |   BeautifulSoup(markup, “lxml”)   |   速度快；文档容错能力强   | 需要安装C语言库<br>| lxml XML 解析器        |    BeautifulSoup(markup, [“lxml”, “xml”])BeautifulSoup(markup, “xml”)    |  速度快；唯一支持XML的解析器  | 需要安装C语言库<br>| html5lib  |  BeautifulSoup(markup, “html5lib”)   |  最好的容错性；以浏览器的方式解析文档；生成HTML5格式的文档 |  速度慢；不依赖外部扩展  |</p>
+<p>语法：</p>
+<blockquote>
+<ul>
+<li>| Python标准库     |     BeautifulSoup(markup, “html.parser”)| Python的内置标准库；执行速度适中；文档容错能力强     | Python 2.7.3 or 3.2.2)前 的版本中文档容错能力差</li>
+<li>| lxml HTML 解析器        |   BeautifulSoup(markup, “lxml”)   |   速度快；文档容错能力强   | 需要安装C语言库</li>
+<li>| lxml XML 解析器        |    BeautifulSoup(markup, [“lxml”, “xml”])BeautifulSoup(markup, “xml”)    |  速度快；唯一支持XML的解析器  | 需要安装C语言库</li>
+<li>| html5lib  |  BeautifulSoup(markup, “html5lib”)   |  最好的容错性；以浏览器的方式解析文档；生成HTML5格式的文档 |  速度慢；不依赖外部扩展  |</li>
+</ul>
+</blockquote>
 <a id="more"></a>
-<h3 id="soup-select-选择标签问题"><a href="#soup-select-选择标签问题" class="headerlink" title="soup.select ( ) 选择标签问题"></a>soup.select ( ) 选择标签问题</h3><p>代码原型是这样的：</p>
+<h3 id="soup-select-选择标签问题"><a href="#soup-select-选择标签问题" class="headerlink" title="soup.select ( ) 选择标签问题"></a><strong>soup.select ( ) 选择标签问题</strong></h3><p>代码原型是这样的：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">web_data = requests.get(<span class="string">'url'</span>)</span><br><span class="line">soup = BeautifulSoup(web_data.text,<span class="string">'lxml'</span>)</span><br><span class="line">data = soup.select(<span class="string">'选择内容'</span>)</span><br><span class="line"><span class="keyword">print</span> (data)</span><br></pre></td></tr></table></figure>
 <p>url: <a href="http://www.meihua.info/" target="_blank" rel="external">http://www.meihua.info/</a></p>
 <blockquote>
@@ -243,7 +251,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">body &gt; div.main-frame &gt; div.news-list-list &gt; ul.list.news-list &gt; li &gt; div.time &gt; span.desc-font.date &gt; span</span><br></pre></td></tr></table></figure>
 <p>运行代码试一下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup <span class="keyword">as</span> bs</span><br><span class="line"></span><br><span class="line">web_data = requests.get(<span class="string">'http://www.meihua.info/?page=1'</span>)</span><br><span class="line"></span><br><span class="line">soup = bs(web_data.text,<span class="string">'lxml'</span>)</span><br><span class="line">post_date = soup.select(<span class="string">'body &gt; div.main-frame &gt; div.news-list-list &gt; ul.list.news-list &gt; li &gt; div.time &gt; span.desc-font.date &gt; span'</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> (post_date.get_text())</span><br><span class="line"></span><br><span class="line">--输出结果--</span><br><span class="line">今天</span><br></pre></td></tr></table></figure>
-<h3 id="编码输出问题"><a href="#编码输出问题" class="headerlink" title="编码输出问题"></a>编码输出问题</h3><p>在抓取这个网页 <a href="http://www.ikanchai.com/" target="_blank" rel="external">http://www.ikanchai.com/</a> 的时候，出现乱码，如下：</p>
+<h3 id="编码输出问题"><a href="#编码输出问题" class="headerlink" title="编码输出问题"></a><strong>编码输出问题</strong></h3><p>在抓取这个网页 <a href="http://www.ikanchai.com/" target="_blank" rel="external">http://www.ikanchai.com/</a> 的时候，出现乱码，如下：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup as bs</span><br><span class="line"></span><br><span class="line">web_data = requests.get('http://www.ikanchai.com/')</span><br><span class="line">soup = bs(web_data.text,'lxml')</span><br><span class="line">dates = soup.select('div.sort.channel.clearfix &gt; ul &gt; li &gt; a')</span><br><span class="line"></span><br><span class="line">for data in dates:</span><br><span class="line">    print (data)</span><br><span class="line">-----输出结果-----</span><br><span class="line">&lt;a href="http://www.ikanchai.com/view/"&gt;è§‚ç‚¹&lt;/a&gt;</span><br><span class="line">&lt;a href="http://www.ikanchai.com/start/"&gt;åˆ›æŠ•&lt;/a&gt;</span><br><span class="line">&lt;a href="http://www.ikanchai.com/evaluation/"&gt;è¯„æµ‹&lt;/a&gt;</span><br><span class="line">&lt;a href="http://www.ikanchai.com/vr/"&gt;VR&lt;/a&gt;</span><br><span class="line">&lt;a href="http://www.ikanchai.com/push/"&gt;ä¸“æ &lt;/a&gt;</span><br><span class="line">&lt;a href="http://app.ikanchai.com/roll.php"&gt;åŠ¨æ€&lt;/a&gt;</span><br></pre></td></tr></table></figure>
 <p>编码问题，加一句web_data.encoding = ‘utf-8’即可以了，具体的编码选择在html文档开头有说明。</p>
 <h3 id="get-text和get-的使用"><a href="#get-text和get-的使用" class="headerlink" title="get_text和get()的使用"></a>get_text和get()的使用</h3><blockquote>
@@ -256,7 +264,7 @@
 </ul>
 </blockquote>
 <p>中，选择li &gt; a这个标签之后，则可以用get(‘href’)获取其中的链接。</p>
-<h3 id="findall-和select-的区别"><a href="#findall-和select-的区别" class="headerlink" title="findall()和select()的区别"></a>findall()和select()的区别</h3><p>待续</p>
+<h3 id="findall-和select-的区别"><a href="#findall-和select-的区别" class="headerlink" title="findall()和select()的区别"></a><strong>findall()和select()的区别</strong></h3><p>待续</p>
 
       
     </div>
@@ -267,8 +275,8 @@
 <nav id="article-nav">
   
   
-    <a href="/2016/07/05/markdown/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Cmd Markdown 编辑器</div>
+    <a href="/2016/07/03/ansible-sample-playbook/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Ansible Playbook应用</div>
       <strong class="article-nav-caption">></strong>
     </a>
   

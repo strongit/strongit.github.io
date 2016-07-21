@@ -110,7 +110,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+						<a href="/tags/Ansible/" style="font-size: 15px;">Ansible</a> <a href="/tags/Extmail/" style="font-size: 10px;">Extmail</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/MongoDB/" style="font-size: 20px;">MongoDB</a> <a href="/tags/rancher/" style="font-size: 20px;">rancher</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
 					</div>
 				</section>
 				
@@ -213,7 +213,15 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Beautiful Soup是python的一个库，最主要的功能是从网页抓取数据。官方解释如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Beautiful Soup提供一些简单的、python式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。</span><br><span class="line">Beautiful Soup自动将输入文档转换为Unicode编码，输出文档转换为utf<span class="number">-8</span>编码。你不需要考虑编码方式，除非文档没有指定一个编码方式，这时，Beautiful Soup就不能自动识别编码方式了。然后，你仅仅需要说明一下原始编码方式就可以了。</span><br><span class="line">Beautiful Soup已成为和lxml、html6lib一样出色的python解释器，为用户灵活地提供不同的解析策略或强劲的速度。</span><br></pre></td></tr></table></figure></p>
-<p>语法：<br>| 解析器        | 使用方法   |  优势  |  劣势 |<br>| ——–   | —–:  | :—-:  |<br>| Python标准库     |     BeautifulSoup(markup, “html.parser”)| Python的内置标准库；执行速度适中；文档容错能力强     | Python 2.7.3 or 3.2.2)前 的版本中文档容错能力差<br>| lxml HTML 解析器        |   BeautifulSoup(markup, “lxml”)   |   速度快；文档容错能力强   | 需要安装C语言库<br>| lxml XML 解析器        |    BeautifulSoup(markup, [“lxml”, “xml”])BeautifulSoup(markup, “xml”)    |  速度快；唯一支持XML的解析器  | 需要安装C语言库<br>| html5lib  |  BeautifulSoup(markup, “html5lib”)   |  最好的容错性；以浏览器的方式解析文档；生成HTML5格式的文档 |  速度慢；不依赖外部扩展  |</p>
+<p>语法：</p>
+<blockquote>
+<ul>
+<li>| Python标准库     |     BeautifulSoup(markup, “html.parser”)| Python的内置标准库；执行速度适中；文档容错能力强     | Python 2.7.3 or 3.2.2)前 的版本中文档容错能力差</li>
+<li>| lxml HTML 解析器        |   BeautifulSoup(markup, “lxml”)   |   速度快；文档容错能力强   | 需要安装C语言库</li>
+<li>| lxml XML 解析器        |    BeautifulSoup(markup, [“lxml”, “xml”])BeautifulSoup(markup, “xml”)    |  速度快；唯一支持XML的解析器  | 需要安装C语言库</li>
+<li>| html5lib  |  BeautifulSoup(markup, “html5lib”)   |  最好的容错性；以浏览器的方式解析文档；生成HTML5格式的文档 |  速度慢；不依赖外部扩展  |</li>
+</ul>
+</blockquote>
       
     </div>
     
@@ -229,81 +237,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/07/15/spider-beautifulsoup4/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-markdown" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/07/05/markdown/" class="article-date">
-  	<time datetime="2016-07-04T16:00:00.000Z" itemprop="datePublished">2016-07-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/05/markdown/">Cmd Markdown 编辑器</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我们理解您需要更便捷更高效的工具记录思想，整理笔记、知识，并将其中承载的价值传播给他人，<strong>Cmd Markdown</strong> 是我们给出的答案 —— 我们为记录思想和分享知识提供更专业的工具。 您可以使用 Cmd Markdown：</p>
-<blockquote>
-<ul>
-<li>整理知识，学习笔记</li>
-<li>发布日记，杂文，所见所想</li>
-<li>撰写发布技术文稿（代码支持）</li>
-<li>撰写发布学术论文（LaTeX 公式支持）</li>
-</ul>
-</blockquote>
-<p><img src="https://www.zybuluo.com/static/img/logo.png" alt="cmd-markdown-logo"></p>
-<p>除了您现在看到的这个 Cmd Markdown 在线版本，您还可以前往以下网址下载：</p>
-<h3 id="Windows-Mac-Linux-全平台客户端"><a href="#Windows-Mac-Linux-全平台客户端" class="headerlink" title="Windows/Mac/Linux 全平台客户端"></a><a href="https://www.zybuluo.com/cmd/">Windows/Mac/Linux 全平台客户端</a></h3><blockquote>
-<p>请保留此份 Cmd Markdown 的欢迎稿兼使用说明，如需撰写新稿件，点击顶部工具栏右侧的 <i class="icon-file"></i> <strong>新文稿</strong> 或者使用快捷键 <code>Ctrl+Alt+N</code>。</p>
-</blockquote>
-<hr>
-<h2 id="什么是-Markdown"><a href="#什么是-Markdown" class="headerlink" title="什么是 Markdown"></a>什么是 Markdown</h2><p>Markdown 是一种方便记忆、书写的纯文本标记语言，用户可以使用这些标记符号以最小的输入代价生成极富表现力的文档：譬如您正在阅读的这份文档。它使用简单的符号标记不同的标题，分割不同的段落，<strong>粗体</strong> 或者 <em>斜体</em> 某些文字，更棒的是，它还可以</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Markdown/">Markdown</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/07/05/markdown/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -349,7 +282,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Playbooks 与 adhoc 相比,是一种完全不同的运用 ansible 的方式,是非常之强大的.简单来说,playbooks 是一种简单的配置管理系统与多机器部署系统的基础.与现有的其他系统有不同之处,且非常适合于复杂应用的部署.Playbooks 可用于声明配置,更强大的地方在于,在 playbooks 中可以编排有序的执行过程,甚至于做到在多组机器间,来回有序的执行特别指定的步骤.并且可以同步或异步的发起任务.我们使用 adhoc 时,主要是使用 /usr/bin/ansible 程序执行任务.而使用 playbooks 时,更多是将之放入源码控制之中,用之推送你的配置或是用于确认你的远程系统的配置是否符合配置规范.</p>
-<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><p>以下为playbook标准的目录结构，以不同级别目录层级的文件进行拆分。</p>
+<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a><strong>目录结构</strong></h3><p>以下为playbook标准的目录结构，以不同级别目录层级的文件进行拆分。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost playbooks]<span class="comment"># tree .</span></span><br><span class="line">.</span><br><span class="line">├── playbooks.yml</span><br><span class="line">├── roles</span><br><span class="line">│   ├── common</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   ├── handlers</span><br><span class="line">│   │   ├── meta</span><br><span class="line">│   │   ├── tasks</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── vars</span><br><span class="line">│   ├── mysql</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │   └── main.yml</span><br><span class="line">│   ├── nginx</span><br><span class="line">│   │   ├── handlers</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │   └── main.yml</span><br><span class="line">│   └── php-fpm</span><br><span class="line">│       └── tasks</span><br><span class="line">│       └── main.yml</span><br><span class="line">└── site.yml</span><br></pre></td></tr></table></figure>
       
     </div>
@@ -412,7 +345,7 @@
       
         <p>ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：<br>(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；<br>(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；<br>(3)、使用python编写，维护更简单；<br>(4)、基于SSH工作；<br>(5)、支持文件同步并且对修改之前的文件进行备份，支持回滚；</p>
 <p>官方原文档: <a href="https://docs.ansible.com/ansible/index.html">https://docs.ansible.com/ansible/index.html</a><br>中文翻译版：<a href="http://www.ansible.com.cn/index.html">http://www.ansible.com.cn/index.html</a></p>
-<h3 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ansible/hosts</span><br><span class="line"></span><br><span class="line">[ts]</span><br><span class="line">192.168.1.106</span><br><span class="line">执行命令 ansible ts -m ping</span><br><span class="line"></span><br><span class="line">192.168.1.106 | success &gt;&gt; &#123;</span><br><span class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a><strong>简单示例</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ansible/hosts</span><br><span class="line"></span><br><span class="line">[ts]</span><br><span class="line">192.168.1.106</span><br><span class="line">执行命令 ansible ts -m ping</span><br><span class="line"></span><br><span class="line">192.168.1.106 | success &gt;&gt; &#123;</span><br><span class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -588,9 +521,85 @@
 
 
   
+    <article id="post-mongodb-mongodb-basic-indexes-compound-indexes" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/12/mongodb-mongodb-basic-indexes-compound-indexes/" class="article-date">
+  	<time datetime="2016-06-11T17:18:41.000Z" itemprop="datePublished">2016-06-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/12/mongodb-mongodb-basic-indexes-compound-indexes/">MONGODB的BASIC INDEXES 和 COMPOUND INDEXES 研究</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前几天看到一个关于 MongoDB 深入索引的PPT</p>
+<p><a href="http://www.slideshare.net/mongodb/mongodb-indexing-the-details">MongoDB Indexing: The Details</a></p>
+<p>仔细的从头看到尾, 里面有个关于Compound Indexes的Range and Equality的讲解,在ppt第129页,重新回顾下这个例子.向一个collection中插入 9 条数据,像下面这样:</p>
+<pre>
+<code class="javascript">
+> db.good.find()
+{ "_id" : ObjectId("4e8d629d8ad8bdf2ed6c1990"), "x" : 1, "y" : "b" }
+{ "_id" : ObjectId("4e8d62a38ad8bdf2ed6c1991"), "x" : 3, "y" : "d" }
+{ "_id" : ObjectId("4e8d62ad8ad8bdf2ed6c1992"), "x" : 4, "y" : "g" }
+{ "_id" : ObjectId("4e8d62b28ad8bdf2ed6c1993"), "x" : 5, "y" : "c" }
+{ "_id" : ObjectId("4e8d62ba8ad8bdf2ed6c1994"), "x" : 6, "y" : "a" }
+{ "_id" : ObjectId("4e8d62c18ad8bdf2ed6c1995"), "x" : 7, "y" : "e" }
+{ "_id" : ObjectId("4e8d62ce8ad8bdf2ed6c1996"), "x" : 8, "y" : "c" }
+{ "_id" : ObjectId("4e8d62d38ad8bdf2ed6c1997"), "x" : 9, "y" : "f" }
+{ "_id" : ObjectId("4e8d719a6cee6416a5a75a43"), "x" : 5, "y" : "d" }
+</code>
+</pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/12/mongodb-mongodb-basic-indexes-compound-indexes/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 </div>
