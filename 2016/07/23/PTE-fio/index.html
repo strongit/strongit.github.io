@@ -24,7 +24,7 @@
 
 
 测试准备工具：fio- Flexible IO Tester官网：[http://">
-<meta property="og:updated_time" content="2016-08-10T03:55:43.335Z">
+<meta property="og:updated_time" content="2016-08-10T03:59:37.194Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用fio测试磁盘I/O性能">
 <meta name="twitter:description" content="前言fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
@@ -248,6 +248,7 @@
 </blockquote>
 <h2 id="测试准备"><a href="#测试准备" class="headerlink" title="测试准备"></a>测试准备</h2><p>工具：fio- Flexible IO Tester<br>官网：<br>[<a href="http://freecode.com/projects/fio" target="_blank" rel="external">http://freecode.com/projects/fio</a>] (<a href="http://freecode.com/projects/fio" target="_blank" rel="external">http://freecode.com/projects/fio</a>)<br>[<a href="http://brick.kernel.dk/snaps/" target="_blank" rel="external">http://brick.kernel.dk/snaps/</a>] (<a href="http://brick.kernel.dk/snaps/" target="_blank" rel="external">http://brick.kernel.dk/snaps/</a>)<br>扩展阅读：<br>fio man：[<a href="http://linux.die.net/man/1/fio" target="_blank" rel="external">http://linux.die.net/man/1/fio</a>] (<a href="http://linux.die.net/man/1/fio" target="_blank" rel="external">http://linux.die.net/man/1/fio</a>)</p>
 <p><strong>注意</strong>：性能测试建议直接通过写裸盘的方式进行测试，会得到较为真实的数据。但直接测试裸盘会破坏文件系统结构，导致数据丢失，请在测试前确认磁盘中数据已备份。</p>
+<a id="more"></a>
 <p>安装：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#yum安装</span></span><br><span class="line">yum install libaio-devel fio</span><br><span class="line"><span class="comment">#手动安装</span></span><br><span class="line">yum install libaio-devel</span><br><span class="line">wget http://brick.kernel.dk/snaps/fio-2.2.10.tar.gz</span><br><span class="line">tar -zxvf fio-2.2.10.tar.gz</span><br><span class="line"><span class="built_in">cd</span> fio-2.2.10</span><br><span class="line">make $ make install</span><br></pre></td></tr></table></figure></p>
 <h2 id="fio用法"><a href="#fio用法" class="headerlink" title="fio用法"></a>fio用法</h2><blockquote>
 <ul>
