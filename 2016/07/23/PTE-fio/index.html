@@ -6,40 +6,34 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>使用fio测试磁盘I/O性能 | Strong It</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##前言
-fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
+  <meta name="description" content="前言fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
 
 
 简单好用的磁盘性能测试工具
 
 
-##测试准备
-工具：fio- Flexible IO Tester官网：[h">
+测试准备工具：fio- Flexible IO Tester官网：[http://">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用fio测试磁盘I/O性能">
 <meta property="og:url" content="http://strongit.github.io/2016/07/23/PTE-fio/index.html">
 <meta property="og:site_name" content="Strong It">
-<meta property="og:description" content="##前言
-fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
+<meta property="og:description" content="前言fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
 
 
 简单好用的磁盘性能测试工具
 
 
-##测试准备
-工具：fio- Flexible IO Tester官网：[h">
-<meta property="og:updated_time" content="2016-08-10T03:52:47.231Z">
+测试准备工具：fio- Flexible IO Tester官网：[http://">
+<meta property="og:updated_time" content="2016-08-10T03:55:43.335Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用fio测试磁盘I/O性能">
-<meta name="twitter:description" content="##前言
-fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
+<meta name="twitter:description" content="前言fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
 
 
 简单好用的磁盘性能测试工具
 
 
-##测试准备
-工具：fio- Flexible IO Tester官网：[h">
+测试准备工具：fio- Flexible IO Tester官网：[http://">
   
     <link rel="alternative" href="/atom.xml" title="Strong It" type="application/atom+xml">
   
@@ -246,19 +240,16 @@ fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验�
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##前言</p>
-<p>fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。</p>
 <blockquote>
 <ul>
 <li>简单好用的磁盘性能测试工具</li>
 </ul>
 </blockquote>
-<p>##测试准备</p>
-<p>工具：fio- Flexible IO Tester<br>官网：<br>[<a href="http://freecode.com/projects/fio" target="_blank" rel="external">http://freecode.com/projects/fio</a>] (<a href="http://freecode.com/projects/fio" target="_blank" rel="external">http://freecode.com/projects/fio</a>)<br>[<a href="http://brick.kernel.dk/snaps/" target="_blank" rel="external">http://brick.kernel.dk/snaps/</a>] (<a href="http://brick.kernel.dk/snaps/" target="_blank" rel="external">http://brick.kernel.dk/snaps/</a>)<br>扩展阅读：<br>fio man：[<a href="http://linux.die.net/man/1/fio" target="_blank" rel="external">http://linux.die.net/man/1/fio</a>] (<a href="http://linux.die.net/man/1/fio" target="_blank" rel="external">http://linux.die.net/man/1/fio</a>)</p>
+<h2 id="测试准备"><a href="#测试准备" class="headerlink" title="测试准备"></a>测试准备</h2><p>工具：fio- Flexible IO Tester<br>官网：<br>[<a href="http://freecode.com/projects/fio" target="_blank" rel="external">http://freecode.com/projects/fio</a>] (<a href="http://freecode.com/projects/fio" target="_blank" rel="external">http://freecode.com/projects/fio</a>)<br>[<a href="http://brick.kernel.dk/snaps/" target="_blank" rel="external">http://brick.kernel.dk/snaps/</a>] (<a href="http://brick.kernel.dk/snaps/" target="_blank" rel="external">http://brick.kernel.dk/snaps/</a>)<br>扩展阅读：<br>fio man：[<a href="http://linux.die.net/man/1/fio" target="_blank" rel="external">http://linux.die.net/man/1/fio</a>] (<a href="http://linux.die.net/man/1/fio" target="_blank" rel="external">http://linux.die.net/man/1/fio</a>)</p>
 <p><strong>注意</strong>：性能测试建议直接通过写裸盘的方式进行测试，会得到较为真实的数据。但直接测试裸盘会破坏文件系统结构，导致数据丢失，请在测试前确认磁盘中数据已备份。</p>
 <p>安装：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#yum安装</span></span><br><span class="line">yum install libaio-devel fio</span><br><span class="line"><span class="comment">#手动安装</span></span><br><span class="line">yum install libaio-devel</span><br><span class="line">wget http://brick.kernel.dk/snaps/fio-2.2.10.tar.gz</span><br><span class="line">tar -zxvf fio-2.2.10.tar.gz</span><br><span class="line"><span class="built_in">cd</span> fio-2.2.10</span><br><span class="line">make $ make install</span><br></pre></td></tr></table></figure></p>
-<p>##fio用法</p>
-<blockquote>
+<h2 id="fio用法"><a href="#fio用法" class="headerlink" title="fio用法"></a>fio用法</h2><blockquote>
 <ul>
 <li>fio分顺序读，随机读，顺序写，随机写，混合随机读写模式。</li>
 </ul>
@@ -272,7 +263,7 @@ fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验�
 <li>测试结果主要关注bw和iops结果<br>bw：磁盘的吞吐量，这个是顺序读写考察的重点<br>iops：磁盘的每秒读写次数，这个是随机读写考察的重点</li>
 </ul>
 </blockquote>
-<p>##硬盘性能指标<br><strong>顺序读写</strong> （吞吐量，常用单位为MB/s）：文件在硬盘上存储位置是连续的。<br>适用场景：大文件拷贝（比如视频音乐）。速度即使很高，对数据库性能也没有参考价值。<br><strong>4K随机读写</strong> （IOPS，常用单位为次）：在硬盘上随机位置读写数据，每次4KB。<br>适用场景：操作系统运行、软件运行、数据库。</p>
+<h2 id="硬盘性能指标"><a href="#硬盘性能指标" class="headerlink" title="硬盘性能指标"></a>硬盘性能指标</h2><p><strong>顺序读写</strong> （吞吐量，常用单位为MB/s）：文件在硬盘上存储位置是连续的。<br>适用场景：大文件拷贝（比如视频音乐）。速度即使很高，对数据库性能也没有参考价值。<br><strong>4K随机读写</strong> （IOPS，常用单位为次）：在硬盘上随机位置读写数据，每次4KB。<br>适用场景：操作系统运行、软件运行、数据库。</p>
 
       
     </div>
