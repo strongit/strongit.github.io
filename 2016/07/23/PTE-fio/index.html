@@ -4,17 +4,42 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Strong It</title>
+  <title>使用fio测试磁盘I/O性能 | Strong It</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Strong It">
-<meta property="og:url" content="http://strongit.github.io/index.html">
+  <meta name="description" content="##前言
+fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
+
+
+简单好用的磁盘性能测试工具
+
+
+##测试准备
+工具：fio- Flexible IO Tester官网：[h">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用fio测试磁盘I/O性能">
+<meta property="og:url" content="http://strongit.github.io/2016/07/23/PTE-fio/index.html">
 <meta property="og:site_name" content="Strong It">
-<meta property="og:description">
+<meta property="og:description" content="##前言
+fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
+
+
+简单好用的磁盘性能测试工具
+
+
+##测试准备
+工具：fio- Flexible IO Tester官网：[h">
+<meta property="og:updated_time" content="2016-08-10T03:48:20.445Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Strong It">
-<meta name="twitter:description">
+<meta name="twitter:title" content="使用fio测试磁盘I/O性能">
+<meta name="twitter:description" content="##前言
+fio是测试IOPS的非常好的工具，用来对硬件进行压力测试和验证，支持13种不同的I/O引擎，包括:sync,mmap, libaio, posixaio, SG v3, splice, null, network, syslet, guasi, solarisaio 等等。
+
+
+简单好用的磁盘性能测试工具
+
+
+##测试准备
+工具：fio- Flexible IO Tester官网：[h">
   
     <link rel="alternative" href="/atom.xml" title="Strong It" type="application/atom+xml">
   
@@ -184,9 +209,7 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
-  
-    <article id="post-PTE-fio" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-PTE-fio" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2016/07/23/PTE-fio/" class="article-date">
@@ -202,12 +225,23 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/23/PTE-fio/">使用fio测试磁盘I/O性能</a>
+    <h1 class="article-title" itemprop="name">
+      使用fio测试磁盘I/O性能
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -243,372 +277,68 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/07/15/spider-beautifulsoup4/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">爬虫利器之BeautifulSoup4</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
   
 </article>
 
 
-
-
-
-
-
-
-
-  
-    <article id="post-spider-beautifulsoup4" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/07/15/spider-beautifulsoup4/" class="article-date">
-  	<time datetime="2016-07-14T16:00:00.000Z" itemprop="datePublished">2016-07-15</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/15/spider-beautifulsoup4/">爬虫利器之BeautifulSoup4</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Beautiful Soup是python的一个库，最主要的功能是从网页抓取数据。官方解释如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Beautiful Soup提供一些简单的、python式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。</span><br><span class="line">Beautiful Soup自动将输入文档转换为Unicode编码，输出文档转换为utf<span class="number">-8</span>编码。你不需要考虑编码方式，除非文档没有指定一个编码方式，这时，Beautiful Soup就不能自动识别编码方式了。然后，你仅仅需要说明一下原始编码方式就可以了。</span><br><span class="line">Beautiful Soup已成为和lxml、html6lib一样出色的python解释器，为用户灵活地提供不同的解析策略或强劲的速度。</span><br></pre></td></tr></table></figure></p>
-<p>语法：</p>
-<blockquote>
-<ul>
-<li>| Python标准库     |     BeautifulSoup(markup, “html.parser”)| Python的内置标准库；执行速度适中；文档容错能力强     | Python 2.7.3 or 3.2.2)前 的版本中文档容错能力差</li>
-<li>| lxml HTML 解析器        |   BeautifulSoup(markup, “lxml”)   |   速度快；文档容错能力强   | 需要安装C语言库</li>
-<li>| lxml XML 解析器        |    BeautifulSoup(markup, [“lxml”, “xml”])BeautifulSoup(markup, “xml”)    |  速度快；唯一支持XML的解析器  | 需要安装C语言库</li>
-<li>| html5lib  |  BeautifulSoup(markup, “html5lib”)   |  最好的容错性；以浏览器的方式解析文档；生成HTML5格式的文档 |  速度慢；不依赖外部扩展  |</li>
-</ul>
-</blockquote>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/爬虫/">爬虫</a></li></ul>
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/07/15/spider-beautifulsoup4/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
 
 
 
-
-
-
-  
-    <article id="post-ansible-sample-playbook" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/07/03/ansible-sample-playbook/" class="article-date">
-  	<time datetime="2016-07-02T16:00:00.000Z" itemprop="datePublished">2016-07-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/03/ansible-sample-playbook/">Ansible Playbook应用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Playbooks 与 adhoc 相比,是一种完全不同的运用 ansible 的方式,是非常之强大的.简单来说,playbooks 是一种简单的配置管理系统与多机器部署系统的基础.与现有的其他系统有不同之处,且非常适合于复杂应用的部署.Playbooks 可用于声明配置,更强大的地方在于,在 playbooks 中可以编排有序的执行过程,甚至于做到在多组机器间,来回有序的执行特别指定的步骤.并且可以同步或异步的发起任务.我们使用 adhoc 时,主要是使用 /usr/bin/ansible 程序执行任务.而使用 playbooks 时,更多是将之放入源码控制之中,用之推送你的配置或是用于确认你的远程系统的配置是否符合配置规范.</p>
-<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a><strong>目录结构</strong></h3><p>以下为playbook标准的目录结构，以不同级别目录层级的文件进行拆分。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost playbooks]<span class="comment"># tree .</span></span><br><span class="line">.</span><br><span class="line">├── playbooks.yml</span><br><span class="line">├── roles</span><br><span class="line">│   ├── common</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   ├── handlers</span><br><span class="line">│   │   ├── meta</span><br><span class="line">│   │   ├── tasks</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── vars</span><br><span class="line">│   ├── mysql</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │   └── main.yml</span><br><span class="line">│   ├── nginx</span><br><span class="line">│   │   ├── handlers</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │   └── main.yml</span><br><span class="line">│   └── php-fpm</span><br><span class="line">│       └── tasks</span><br><span class="line">│       └── main.yml</span><br><span class="line">└── site.yml</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/07/03/ansible-sample-playbook/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="PTE-fio" data-title="使用fio测试磁盘I/O性能" data-url="http://strongit.github.io/2016/07/23/PTE-fio/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
 
-
-
-
-
-
-  
-    <article id="post-ansible-sample-usage" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/07/01/ansible-sample-usage/" class="article-date">
-  	<time datetime="2016-06-30T16:00:00.000Z" itemprop="datePublished">2016-07-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/01/ansible-sample-usage/">Ansible简单配置篇</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>ansible自动化工具只需要在一台机器上安装，其他机器不需要安装任何东西，这就是ansible比puppet, saltstck方便的地方。ansible的特点有哪些呢？下面为你逐个介绍：<br>(1)、轻量级，无需在客户端安装agent，更新时，只需在操作机上进行一次更新即可；<br>(2)、批量任务执行可以写成脚本，而且不用分发到远程就可以执行；<br>(3)、使用python编写，维护更简单；<br>(4)、基于SSH工作；<br>(5)、支持文件同步并且对修改之前的文件进行备份，支持回滚；</p>
-<p>官方原文档: <a href="https://docs.ansible.com/ansible/index.html">https://docs.ansible.com/ansible/index.html</a><br>中文翻译版：<a href="http://www.ansible.com.cn/index.html">http://www.ansible.com.cn/index.html</a></p>
-<h3 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a><strong>简单示例</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ansible/hosts</span><br><span class="line"></span><br><span class="line">[ts]</span><br><span class="line">192.168.1.106</span><br><span class="line">执行命令 ansible ts -m ping</span><br><span class="line"></span><br><span class="line">192.168.1.106 | success &gt;&gt; &#123;</span><br><span class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>, </span><br><span class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ansible/">Ansible</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/07/01/ansible-sample-usage/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-mongodb-howto-nodejs-atom-op-mongodb" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/21/mongodb-howto-nodejs-atom-op-mongodb/" class="article-date">
-  	<time datetime="2016-06-20T16:00:00.000Z" itemprop="datePublished">2016-06-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/21/mongodb-howto-nodejs-atom-op-mongodb/">Node.js原子性操作MongoDB</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>假设基础数据为:</p>
-<pre>
-<code class="javascript">
-{
-    "name" : "cb",
-    "data" : 0,
-}
-</code>
-</pre>
-
-<p>有时候为了充分利用多核,会同时开启多个node进程,但是若部分代码若涉及到操作mongodb就会有下面现象.<br>“理想情况下”,多个进程执行完后得数据为:</p>
-<pre>
-<code class="javascript">
-{
-    "name" : "cb",
-    "data" : 6000,
-}
-</code>
-</pre>
-
-<p>其实不然 !<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/06/21/mongodb-howto-nodejs-atom-op-mongodb/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-mongodb-mongodb-map-reduce-increase-speed" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/18/mongodb-mongodb-map-reduce-increase-speed/" class="article-date">
-  	<time datetime="2016-06-17T16:00:00.000Z" itemprop="datePublished">2016-06-18</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/18/mongodb-mongodb-map-reduce-increase-speed/">MongoDB Map-Reduce 原理及提速</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>想要优化Map-reduce就要深入理解其原理.</p>
-<p>Map-Reduce基本原理请见下图:</p>
-<p><img src="http://ww4.sinaimg.cn/large/744e593bgw1eodjvvjkrij20r80jgdj7.jpg" alt="Map-Reduce基本原理"></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/06/18/mongodb-mongodb-map-reduce-increase-speed/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -632,8 +362,8 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
